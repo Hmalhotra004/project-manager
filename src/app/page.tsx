@@ -1,8 +1,10 @@
+import ProjectsSidebar from "@/components/ProjectsSidebar";
+
 const Home = () => {
   return (
-    <div>
-      <h2>Hellow world</h2>
-    </div>
+    <main className="h-screen my-8">
+      <ProjectsSidebar />
+    </main>
   );
 };
 
