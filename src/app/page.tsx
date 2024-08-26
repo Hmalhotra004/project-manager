@@ -47,6 +47,16 @@ const Home = () => {
     });
   };
 
+  const handleDelProject = () => {
+    setProjectState(pv => {
+      return {
+        ...pv,
+        selectedProjectId: undefined,
+        projects: pv.projects.filter(project => project.id !== pv.selectedProjectId),
+      };
+    });
+  };
+
   const handleAddProject = (projectData: ProjectData) => {
     const projectId = Math.random(); //sql id generated later on
     setProjectState(pv => {
@@ -86,7 +96,14 @@ const Home = () => {
   } else {
     const selectedProject = projectState.projects.find(project => project.id === projectState.selectedProjectId);
 
-    content = selectedProject ? <SelectedProject project={selectedProject} /> : <NoProjectSelected onStartAddProject={handleStartAddProject} />;
+    content = selectedProject ? (
+      <SelectedProject
+        project={selectedProject}
+        onDel={handleDelProject}
+      />
+    ) : (
+      <NoProjectSelected onStartAddProject={handleStartAddProject} />
+    );
   }
 
   return (
