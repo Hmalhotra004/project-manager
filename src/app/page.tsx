@@ -37,6 +37,15 @@ const Home = () => {
     });
   };
 
+  const handleCancelAddProject = () => {
+    setProjectState(pv => {
+      return {
+        ...pv,
+        selectedProjectId: undefined,
+      };
+    });
+  };
+
   const handleAddProject = (projectData: ProjectData) => {
     const projectId = Math.random(); //sql id generated later on
     setProjectState(pv => {
@@ -55,7 +64,12 @@ const Home = () => {
   let content;
 
   if (projectState.selectedProjectId === null) {
-    content = <NewProject onAdd={handleAddProject} />;
+    content = (
+      <NewProject
+        onAdd={handleAddProject}
+        onCan={handleCancelAddProject}
+      />
+    );
   } else if (projectState.selectedProjectId === undefined) {
     content = <NoProjectSelected onStartAddProject={handleStartAddProject} />;
   }
