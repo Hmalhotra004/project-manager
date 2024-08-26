@@ -4,7 +4,7 @@ import NoProjectSelected from "@/components/NoProjectSelected";
 import ProjectsSidebar from "@/components/ProjectsSidebar";
 import { useState } from "react";
 
-type Project = {
+export type Project = {
   id: number;
   title: string | undefined;
   desp: string | undefined;
@@ -38,19 +38,19 @@ const Home = () => {
   };
 
   const handleAddProject = (projectData: ProjectData) => {
+    const projectId = Math.random(); //sql id generated later on
     setProjectState(pv => {
       const newProject = {
         ...projectData,
-        id: Math.random(), //sql id generated later on
+        id: projectId,
       };
       return {
         ...pv,
+        selectedProjectId: undefined,
         projects: [...pv.projects, newProject],
       };
     });
   };
-
-  console.log(projectState);
 
   let content;
 
@@ -62,7 +62,10 @@ const Home = () => {
 
   return (
     <main className="h-screen my-8 flex gap-8">
-      <ProjectsSidebar onStartAddProject={handleStartAddProject} />
+      <ProjectsSidebar
+        onStartAddProject={handleStartAddProject}
+        projects={projectState.projects}
+      />
       {content}
     </main>
   );
