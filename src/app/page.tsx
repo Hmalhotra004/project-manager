@@ -4,9 +4,22 @@ import NoProjectSelected from "@/components/NoProjectSelected";
 import ProjectsSidebar from "@/components/ProjectsSidebar";
 import { useState } from "react";
 
+type Project = {
+  id: number;
+  title: string | undefined;
+  desp: string | undefined;
+  date: string | undefined;
+};
+
+export type ProjectData = {
+  title: string | undefined;
+  desp: string | undefined;
+  date: string | undefined;
+};
+
 type State = {
   selectedProjectId: undefined | null;
-  projects: string[];
+  projects: Project[];
 };
 
 const Home = () => {
@@ -24,10 +37,25 @@ const Home = () => {
     });
   };
 
+  const handleAddProject = (projectData: ProjectData) => {
+    setProjectState(pv => {
+      const newProject = {
+        ...projectData,
+        id: Math.random(), //sql id generated later on
+      };
+      return {
+        ...pv,
+        projects: [...pv.projects, newProject],
+      };
+    });
+  };
+
+  console.log(projectState);
+
   let content;
 
   if (projectState.selectedProjectId === null) {
-    content = <NewProject />;
+    content = <NewProject onAdd={handleAddProject} />;
   } else if (projectState.selectedProjectId === undefined) {
     content = <NoProjectSelected onStartAddProject={handleStartAddProject} />;
   }
