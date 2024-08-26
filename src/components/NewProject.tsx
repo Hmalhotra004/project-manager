@@ -19,7 +19,7 @@ const NewProject = ({ onAdd, onCan }: Props) => {
 
     const title = titleRef.current?.value;
     const desp = despRef.current?.value;
-    const date = dateRef.current?.value;
+    const date = dateRef.current?.value || "";
 
     if (title?.trim() === "" || date?.trim() === "" || desp?.trim() === "") {
       modal.current?.open();
