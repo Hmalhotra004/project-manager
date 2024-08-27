@@ -1,4 +1,5 @@
 import { ProjectData } from "@/app/page";
+import Tasks from "./Tasks";
 
 type Props = {
   project: ProjectData;
@@ -27,7 +28,7 @@ const SelectedProject = ({ project, onDel }: Props) => {
         <p className="mb-4 text-stone-400">{formattedDate}</p>
         <p className="text-stone-600 whitespace-pre-wrap">{project.desp}</p>
       </header>
-      {/* tasks */}
+      <Tasks />
     </div>
   );
 };
