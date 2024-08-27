@@ -18,16 +18,49 @@ export type ProjectData = {
   date: string;
 };
 
+export type Task = {
+  text: string;
+  projectId: number | null | undefined;
+  id: number;
+};
+
 type State = {
   selectedProjectId: undefined | null | number;
   projects: Project[];
+  tasks: Task[];
 };
 
 const Home = () => {
   const [projectState, setProjectState] = useState<State>({
     selectedProjectId: undefined,
     projects: [],
+    tasks: [],
   });
+
+  const handleAddTask = (text: string) => {
+    const taskId = Math.random(); //sql id generated later on
+    setProjectState(pv => {
+      const newtask = {
+        text: text,
+        projectId: pv.selectedProjectId,
+        id: taskId,
+      };
+
+      return {
+        ...pv,
+        tasks: [newtask, ...pv.tasks],
+      };
+    });
+  };
+
+  const handleDelTask = (id: number) => {
+    setProjectState(pv => {
+      return {
+        ...pv,
+        tasks: pv.tasks.filter(task => task.id !== id),
+      };
+    });
+  };
 
   const handleStartAddProject = () => {
     setProjectState(pv => {
@@ -100,6 +133,9 @@ const Home = () => {
       <SelectedProject
         project={selectedProject}
         onDel={handleDelProject}
+        onAddT={handleAddTask}
+        onDelT={handleDelTask}
+        tasks={projectState.tasks}
       />
     ) : (
       <NoProjectSelected onStartAddProject={handleStartAddProject} />

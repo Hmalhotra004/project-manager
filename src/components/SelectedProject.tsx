@@ -1,12 +1,15 @@
-import { ProjectData } from "@/app/page";
+import { ProjectData, Task } from "@/app/page";
 import Tasks from "./Tasks";
 
 type Props = {
   project: ProjectData;
   onDel: () => void;
+  onAddT: (e: string) => void;
+  onDelT: (id:number) => void;
+  tasks: Task[];
 };
 
-const SelectedProject = ({ project, onDel }: Props) => {
+const SelectedProject = ({ project, onDel, onAddT, onDelT, tasks }: Props) => {
   const formattedDate = new Date(project.date).toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
@@ -28,7 +31,11 @@ const SelectedProject = ({ project, onDel }: Props) => {
         <p className="mb-4 text-stone-400">{formattedDate}</p>
         <p className="text-stone-600 whitespace-pre-wrap">{project.desp}</p>
       </header>
-      <Tasks />
+      <Tasks
+        onAdd={onAddT}
+        onDel={onDelT}
+        tasks={tasks}
+      />
     </div>
   );
 };
