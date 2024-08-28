@@ -5,7 +5,7 @@ type Props = {
   project: ProjectData;
   onDel: () => void;
   onAddT: (e: string) => void;
-  onDelT: (id:number) => void;
+  onDelT: (id: number) => void;
   tasks: Task[];
 };
 
