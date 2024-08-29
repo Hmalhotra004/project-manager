@@ -1,18 +1,21 @@
 import { ProjectData } from "@/app/page";
+import { projectActions } from "@/store/store";
 import { useRef } from "react";
+import { useDispatch } from "react-redux";
 import Input from "./Input";
 import Modal, { ModalHandle } from "./Modal";
 
 type Props = {
   onAdd: ({ title, desp, date }: ProjectData) => void;
-  onCan: () => void;
 };
 
-const NewProject = ({ onAdd, onCan }: Props) => {
+const NewProject = ({ onAdd }: Props) => {
   const titleRef = useRef<HTMLInputElement>(null);
   const despRef = useRef<HTMLTextAreaElement>(null);
   const dateRef = useRef<HTMLInputElement>(null);
   const modal = useRef<ModalHandle>(null);
+
+  const dispatch = useDispatch();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -33,6 +36,10 @@ const NewProject = ({ onAdd, onCan }: Props) => {
     });
   };
 
+  function handleCancelAddProject() {
+    dispatch(projectActions.CancelAddProject());
+  }
+
   return (
     <>
       <Modal
@@ -52,7 +59,7 @@ const NewProject = ({ onAdd, onCan }: Props) => {
           <li>
             <button
               type="button"
-              onClick={onCan}
+              onClick={handleCancelAddProject}
               className="text-stone-800 hover:text-stone-950 transition-colors"
             >
               Cancel

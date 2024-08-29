@@ -4,6 +4,7 @@ import NoProjectSelected from "@/components/NoProjectSelected";
 import ProjectsSidebar from "@/components/ProjectsSidebar";
 import SelectedProject from "@/components/SelectedProject";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 export type Project = {
   id: number;
@@ -31,6 +32,8 @@ type State = {
 };
 
 const Home = () => {
+  const currAction = useSelector(state => state.currAction);
+
   const [projectState, setProjectState] = useState<State>({
     selectedProjectId: undefined,
     projects: [],
@@ -58,24 +61,6 @@ const Home = () => {
       return {
         ...pv,
         tasks: pv.tasks.filter(task => task.id !== id),
-      };
-    });
-  };
-
-  const handleStartAddProject = () => {
-    setProjectState(pv => {
-      return {
-        ...pv,
-        selectedProjectId: null,
-      };
-    });
-  };
-
-  const handleCancelAddProject = () => {
-    setProjectState(pv => {
-      return {
-        ...pv,
-        selectedProjectId: undefined,
       };
     });
   };
@@ -117,15 +102,10 @@ const Home = () => {
 
   let content;
 
-  if (projectState.selectedProjectId === undefined) {
-    content = <NoProjectSelected onStartAddProject={handleStartAddProject} />;
-  } else if (projectState.selectedProjectId === null) {
-    content = (
-      <NewProject
-        onAdd={handleAddProject}
-        onCan={handleCancelAddProject}
-      />
-    );
+  if (currAction === "none") {
+    content = <NoProjectSelected />;
+  } else if (currAction === "add") {
+    content = <NewProject onAdd={handleAddProject} />;
   } else {
     const selectedProject = projectState.projects.find(project => project.id === projectState.selectedProjectId);
 
@@ -138,14 +118,13 @@ const Home = () => {
         tasks={projectState.tasks}
       />
     ) : (
-      <NoProjectSelected onStartAddProject={handleStartAddProject} />
+      <NoProjectSelected />
     );
   }
 
   return (
     <main className="h-screen my-8 flex gap-8">
       <ProjectsSidebar
-        onStartAddProject={handleStartAddProject}
         projects={projectState.projects}
         onSelect={handleSelectProject}
         selectedProjectId={projectState.selectedProjectId}
