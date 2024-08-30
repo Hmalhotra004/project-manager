@@ -28,11 +28,11 @@ const NewProject = () => {
     const desp = despRef.current?.value;
     const date = dateRef.current?.value || "";
 
-    // if (title?.trim() === "" || date?.trim() === "" || desp?.trim() === "") {
-    //   modal.current?.open();
-    //   return;
-    // }
-    
+    if (title?.trim() === "" || date?.trim() === "" || desp?.trim() === "") {
+      modal.current?.open();
+      return;
+    }
+
     const id = Math.random();
     handleAddProject({
       id,
