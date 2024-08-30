@@ -5,17 +5,21 @@ import { useDispatch } from "react-redux";
 import Input from "./Input";
 import Modal, { ModalHandle } from "./Modal";
 
-type Props = {
-  onAdd: ({ title, desp, date }: ProjectData) => void;
-};
-
-const NewProject = ({ onAdd }: Props) => {
+const NewProject = () => {
   const titleRef = useRef<HTMLInputElement>(null);
   const despRef = useRef<HTMLTextAreaElement>(null);
   const dateRef = useRef<HTMLInputElement>(null);
   const modal = useRef<ModalHandle>(null);
 
   const dispatch = useDispatch();
+
+  function handleCancelAddProject() {
+    dispatch(projectActions.CancelAddProject());
+  }
+
+  function handleAddProject(data: ProjectData) {
+    dispatch(projectActions.AddProject({ title: data.title, desp: data.desp, date: data.date }));
+  }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -29,16 +33,12 @@ const NewProject = ({ onAdd }: Props) => {
       return;
     }
 
-    onAdd({
+    handleAddProject({
       title,
       desp,
       date,
     });
   };
-
-  function handleCancelAddProject() {
-    dispatch(projectActions.CancelAddProject());
-  }
 
   return (
     <>

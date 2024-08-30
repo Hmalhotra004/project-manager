@@ -1,6 +1,32 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+export type Project = {
+  id: number;
+  title: string | undefined;
+  desp: string | undefined;
+  date: string;
+};
+
+export type ProjectData = {
+  title: string | undefined;
+  desp: string | undefined;
+  date: string;
+};
+
+export type Task = {
+  text: string;
+  projectId: number;
+  id: number;
+};
+
+type State = {
+  currAction: string;
+  selectedProjectId: undefined | number;
+  projects: Project[];
+  tasks: Task[];
+};
+
+const initialState: State = {
   currAction: "none",
   selectedProjectId: undefined,
   projects: [],
@@ -15,6 +41,20 @@ const projectSlice = createSlice({
       state.currAction = "add";
     },
     CancelAddProject(state) {
+      state.currAction = "none";
+    },
+    AddProject(state, action) {
+      state.currAction = "none";
+      state.projects = [action.payload];
+    },
+    SelectProject(state, action) {
+      state.selectedProjectId = action.payload;
+    },
+    DeleteProject(state) {
+      if (state.selectedProjectId !== undefined) {
+        state.projects = state.projects.filter(project => project.id !== state.selectedProjectId);
+        state.selectedProjectId = undefined; // Reset selected project ID
+      }
       state.currAction = "none";
     },
   },
@@ -44,37 +84,12 @@ export default store;
 //   });
 // };
 
-// const handleDelTask = (id: number) => {
-//   setProjectState(pv => {
-//     return {
-//       ...pv,
-//       tasks: pv.tasks.filter(task => task.id !== id),
-//     };
-//   });
-// };
-
 // const handleDelProject = () => {
 //   setProjectState(pv => {
 //     return {
 //       ...pv,
 //       selectedProjectId: undefined,
 //       projects: pv.projects.filter(project => project.id !== pv.selectedProjectId),
-//     };
-//   });
-// };
-
-// const handleAddProject = (projectData: ProjectData) => {
-//   const projectId = Math.random(); //sql id generated later on
-//   setProjectState(pv => {
-//     const newProject = {
-//       ...projectData,
-//       id: projectId,
-//     };
-
-//     return {
-//       ...pv,
-//       selectedProjectId: undefined,
-//       projects: [...pv.projects, newProject],
 //     };
 //   });
 // };

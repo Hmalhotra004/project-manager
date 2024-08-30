@@ -1,18 +1,18 @@
-import { Project } from "@/app/page";
-import { projectActions } from "@/store/store";
-import { useDispatch } from "react-redux";
+import { Project, projectActions } from "@/store/store";
+import { useDispatch, useSelector } from "react-redux";
 import Button from "./Button";
 
-type Props = {
-  projects: Project[];
-  onSelect: (id: number) => void;
-  selectedProjectId: number | undefined | null;
-};
-
-const ProjectsSidebar = ({ projects, onSelect, selectedProjectId }: Props) => {
+const ProjectsSidebar = () => {
   const dispatch = useDispatch();
 
-  function handleClick() {
+  const projects: Project[] = useSelector((state: { projects: Project[] }) => state.projects);
+  const selectedProjectId: undefined | number = useSelector((state: { selectedProjectId: undefined | number }) => state.selectedProjectId);
+
+  function handleSelectClick(id: number) {
+    dispatch(projectActions.SelectProject(id));
+  }
+
+  function handleAddClick() {
     dispatch(projectActions.StartAddProject());
   }
 
@@ -20,7 +20,7 @@ const ProjectsSidebar = ({ projects, onSelect, selectedProjectId }: Props) => {
     <aside className="w-1/3 px-8 py-16 bg-stone-900 text-stone-50 md:w-72 rounded-r-xl">
       <h2 className="mb-8 font-bold uppercase md:text-xl text-stone-200">Your Projects</h2>
       <div>
-        <Button onClick={handleClick}>+ Add Project</Button>
+        <Button onClick={handleAddClick}>+ Add Project</Button>
       </div>
       <ul className="mt-4">
         {projects.map(project => {
@@ -35,7 +35,7 @@ const ProjectsSidebar = ({ projects, onSelect, selectedProjectId }: Props) => {
           return (
             <li key={project.id}>
               <button
-                onClick={() => onSelect(project.id)}
+                onClick={() => handleSelectClick(project.id)}
                 className={cssClass}
               >
                 {project.title}

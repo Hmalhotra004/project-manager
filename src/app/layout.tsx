@@ -1,6 +1,5 @@
 "use client";
 import store from "@/store/store";
-import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Provider } from "react-redux";
 import "./globals.css";
