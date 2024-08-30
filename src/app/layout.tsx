@@ -6,10 +6,6 @@ import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
-// export const metadata: Metadata = {
-//   title: "Project Manager",
-// };
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -17,6 +13,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <title>Project Manager</title>
+      </head>
       <body className={inter.className}>
         <Provider store={store}>{children}</Provider>
       </body>

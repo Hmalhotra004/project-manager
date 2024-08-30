@@ -21,7 +21,7 @@ const projectSlice = createSlice({
     },
     AddProject(state, action) {
       state.currAction = "none";
-      if (state.projects.length > 0) {
+      if (state.projects.length !== 0) {
         state.projects = [action.payload, state.projects];
       } else {
         state.projects = [action.payload];
