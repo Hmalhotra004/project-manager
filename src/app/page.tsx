@@ -3,32 +3,8 @@ import NewProject from "@/components/NewProject";
 import NoProjectSelected from "@/components/NoProjectSelected";
 import ProjectsSidebar from "@/components/ProjectsSidebar";
 import SelectedProject from "@/components/SelectedProject";
+import { Project } from "@/lib/models";
 import { useSelector } from "react-redux";
-
-export type Project = {
-  id: number;
-  title: string | undefined;
-  desp: string | undefined;
-  date: string;
-};
-
-export type ProjectData = {
-  title: string | undefined;
-  desp: string | undefined;
-  date: string;
-};
-
-export type Task = {
-  text: string;
-  projectId: number | null | undefined;
-  id: number;
-};
-
-type State = {
-  selectedProjectId: undefined | null | number;
-  projects: Project[];
-  tasks: Task[];
-};
 
 const Home = () => {
   const currAction = useSelector((state: { currAction: string }) => state.currAction);

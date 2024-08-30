@@ -1,4 +1,5 @@
-import { Project, projectActions } from "@/store/store";
+import { Project } from "@/lib/models";
+import { projectActions } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "./Button";
 

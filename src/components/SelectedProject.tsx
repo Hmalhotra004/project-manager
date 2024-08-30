@@ -1,4 +1,4 @@
-import { ProjectData } from "@/app/page";
+import { ProjectData } from "@/lib/models";
 import { projectActions } from "@/store/store";
 import { useDispatch } from "react-redux";
 

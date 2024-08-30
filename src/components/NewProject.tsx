@@ -1,4 +1,4 @@
-import { ProjectData } from "@/app/page";
+import { Project } from "@/lib/models";
 import { projectActions } from "@/store/store";
 import { useRef } from "react";
 import { useDispatch } from "react-redux";
@@ -17,8 +17,8 @@ const NewProject = () => {
     dispatch(projectActions.CancelAddProject());
   }
 
-  function handleAddProject(data: ProjectData) {
-    dispatch(projectActions.AddProject({ title: data.title, desp: data.desp, date: data.date }));
+  function handleAddProject(data: Project) {
+    dispatch(projectActions.AddProject({ id: data.id, title: data.title, desp: data.desp, date: data.date }));
   }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -32,8 +32,9 @@ const NewProject = () => {
       modal.current?.open();
       return;
     }
-
+    const id = Math.random();
     handleAddProject({
+      id,
       title,
       desp,
       date,

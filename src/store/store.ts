@@ -1,30 +1,5 @@
+import { State } from "@/lib/models";
 import { configureStore, createSlice } from "@reduxjs/toolkit";
-
-export type Project = {
-  id: number;
-  title: string | undefined;
-  desp: string | undefined;
-  date: string;
-};
-
-export type ProjectData = {
-  title: string | undefined;
-  desp: string | undefined;
-  date: string;
-};
-
-export type Task = {
-  text: string;
-  projectId: number;
-  id: number;
-};
-
-type State = {
-  currAction: string;
-  selectedProjectId: undefined | number;
-  projects: Project[];
-  tasks: Task[];
-};
 
 const initialState: State = {
   currAction: "none",
@@ -39,21 +14,27 @@ const projectSlice = createSlice({
   reducers: {
     StartAddProject(state) {
       state.currAction = "add";
+      state.selectedProjectId = undefined;
     },
     CancelAddProject(state) {
       state.currAction = "none";
     },
     AddProject(state, action) {
       state.currAction = "none";
-      state.projects = [action.payload];
+      if (state.projects.length > 0) {
+        state.projects = [action.payload, state.projects];
+      } else {
+        state.projects = [action.payload];
+      }
     },
     SelectProject(state, action) {
+      state.currAction = "select";
       state.selectedProjectId = action.payload;
     },
     DeleteProject(state) {
       if (state.selectedProjectId !== undefined) {
         state.projects = state.projects.filter(project => project.id !== state.selectedProjectId);
-        state.selectedProjectId = undefined; // Reset selected project ID
+        state.selectedProjectId = undefined;
       }
       state.currAction = "none";
     },
@@ -80,25 +61,6 @@ export default store;
 //     return {
 //       ...pv,
 //       tasks: [newtask, ...pv.tasks],
-//     };
-//   });
-// };
-
-// const handleDelProject = () => {
-//   setProjectState(pv => {
-//     return {
-//       ...pv,
-//       selectedProjectId: undefined,
-//       projects: pv.projects.filter(project => project.id !== pv.selectedProjectId),
-//     };
-//   });
-// };
-
-// const handleSelectProject = (id: number) => {
-//   setProjectState(pv => {
-//     return {
-//       ...pv,
-//       selectedProjectId: id,
 //     };
 //   });
 // };

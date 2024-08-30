@@ -1,4 +1,4 @@
-import { Task } from "@/app/page";
+import { Task } from "@/lib/models";
 import NewTask from "./NewTask";
 
 type Props = {
