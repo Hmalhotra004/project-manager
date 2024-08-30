@@ -21,11 +21,7 @@ const projectSlice = createSlice({
     },
     AddProject(state, action) {
       state.currAction = "none";
-      if (state.projects.length !== 0) {
-        state.projects = [action.payload, state.projects];
-      } else {
-        state.projects = [action.payload];
-      }
+      state.projects = [action.payload, ...state.projects];
     },
     SelectProject(state, action) {
       state.currAction = "select";
@@ -38,6 +34,12 @@ const projectSlice = createSlice({
       }
       state.currAction = "none";
     },
+    AddTask(state, action) {
+      state.tasks = [action.payload, ...state.tasks];
+    },
+    DeleteTask(state, action) {
+      state.tasks = state.tasks.filter(task => task.id !== action.payload);
+    },
   },
 });
 
@@ -48,19 +50,3 @@ const store = configureStore({
 });
 
 export default store;
-
-// const handleAddTask = (text: string) => {
-//   const taskId = Math.random(); //sql id generated later on
-//   setProjectState(pv => {
-//     const newtask = {
-//       text: text,
-//       projectId: pv.selectedProjectId,
-//       id: taskId,
-//     };
-
-//     return {
-//       ...pv,
-//       tasks: [newtask, ...pv.tasks],
-//     };
-//   });
-// };

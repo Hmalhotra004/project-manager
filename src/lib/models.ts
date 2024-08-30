@@ -12,9 +12,9 @@ export type ProjectData = {
 };
 
 export type Task = {
+  id: number;
   text: string;
   projectId: number;
-  id: number;
 };
 
 export type State = {

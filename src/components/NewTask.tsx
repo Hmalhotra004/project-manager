@@ -1,23 +1,24 @@
+import { projectActions } from "@/store/store";
 import { ChangeEvent, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-type Props = {
-  onAdd: (p: string) => void;
-};
-
-const NewTask = ({ onAdd }: Props) => {
+const NewTask = () => {
   const [enteredTask, setEnteredTask] = useState<string>("");
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setEnteredTask(e.target.value);
-  };
+  const selectedProjectId: undefined | number = useSelector((state: { selectedProjectId: undefined | number }) => state.selectedProjectId);
+  const dispatch = useDispatch();
 
-  const handleClick = () => {
+  function addTask() {
     if (enteredTask.trim() === "") {
       return;
     }
-
-    onAdd(enteredTask);
+    const id = Math.random();
+    dispatch(projectActions.AddTask({ id: id, text: enteredTask, projectId: selectedProjectId }));
     setEnteredTask("");
+  }
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setEnteredTask(e.target.value);
   };
 
   return (
@@ -29,7 +30,7 @@ const NewTask = ({ onAdd }: Props) => {
         value={enteredTask}
       />
       <button
-        onClick={handleClick}
+        onClick={addTask}
         className="text-stone-700 hover:text-stone-950 transition-all"
       >
         Add Task

@@ -32,6 +32,7 @@ const NewProject = () => {
       modal.current?.open();
       return;
     }
+    
     const id = Math.random();
     handleAddProject({
       id,

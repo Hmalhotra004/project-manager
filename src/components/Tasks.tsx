@@ -1,17 +1,20 @@
 import { Task } from "@/lib/models";
+import { projectActions } from "@/store/store";
+import { useDispatch, useSelector } from "react-redux";
 import NewTask from "./NewTask";
 
-type Props = {
-  onAdd: (e: string) => void;
-  onDel: (id: number) => void;
-  tasks: Task[];
-};
+const Tasks = () => {
+  const tasks = useSelector((state: { tasks: Task[] }) => state.tasks);
+  const dispatch = useDispatch();
 
-const Tasks = ({ onAdd, onDel, tasks }: Props) => {
+  function deleteTask(id: number) {
+    dispatch(projectActions.DeleteTask(id));
+  }
+
   return (
     <section>
       <h2 className="text-2xl font-bold text-stone-700 mb-4">tasks</h2>
-      <NewTask onAdd={onAdd} />
+      <NewTask />
       {tasks.length === 0 && <p className="text-stone-800 my-4">This project does not have any task yet.</p>}
       {tasks.length > 0 && (
         <ul className="p-4 mt-8 rounded-md bg-stone-100">
@@ -23,7 +26,7 @@ const Tasks = ({ onAdd, onDel, tasks }: Props) => {
               >
                 <span>{task.text}</span>
                 <button
-                  onClick={() => onDel(task.id)}
+                  onClick={() => deleteTask(task.id)}
                   className="text-stone-700 hover:text-red-500 transition-colors"
                 >
                   Delete

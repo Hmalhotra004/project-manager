@@ -1,6 +1,7 @@
 import { ProjectData } from "@/lib/models";
 import { projectActions } from "@/store/store";
 import { useDispatch } from "react-redux";
+import Tasks from "./Tasks";
 
 type Props = {
   project: ProjectData;
@@ -34,11 +35,7 @@ const SelectedProject = ({ project }: Props) => {
         <p className="mb-4 text-stone-400">{formattedDate}</p>
         <p className="text-stone-600 whitespace-pre-wrap">{project.desp}</p>
       </header>
-      {/* <Tasks
-        onAdd={onAddT}
-        onDel={onDelT}
-        tasks={tasks}
-      /> */}
+      <Tasks />
     </div>
   );
 };
