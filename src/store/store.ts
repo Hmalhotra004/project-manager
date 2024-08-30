@@ -25,7 +25,12 @@ const projectSlice = createSlice({
     },
     SelectProject(state, action) {
       state.currAction = "select";
-      state.selectedProjectId = action.payload;
+      if (state.selectedProjectId === action.payload) {
+        state.currAction = "none";
+        state.selectedProjectId = undefined;
+      } else {
+        state.selectedProjectId = action.payload;
+      }
     },
     DeleteProject(state) {
       if (state.selectedProjectId !== undefined) {
