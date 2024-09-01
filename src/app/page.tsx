@@ -24,7 +24,7 @@ const Home = () => {
   }
 
   return (
-    <main className="h-screen my-8 flex gap-8">
+    <main className="flex h-screen gap-8">
       <ProjectsSidebar />
       {content}
     </main>
