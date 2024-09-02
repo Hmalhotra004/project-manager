@@ -24,10 +24,12 @@ const Home = () => {
   }
 
   return (
-    <main className="flex h-screen gap-8">
-      <ProjectsSidebar />
-      {content}
-    </main>
+    <>
+      <main className="flex h-screen w-screen gap-8">
+        <ProjectsSidebar />
+        {content}
+      </main>
+    </>
   );
 };
 
