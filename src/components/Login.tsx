@@ -1,49 +1,26 @@
-"use client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { FormEvent, useRef } from "react";
+import React, { FormEvent, useRef } from "react";
 
-const Page = () => {
-  const nameRef = useRef<HTMLInputElement>(null);
+const Login = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
-  const conPassRef = useRef<HTMLInputElement>(null);
-  const router = useRouter();
-
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    const name = nameRef.current?.value;
     const email = emailRef.current?.value;
     const password = passRef.current?.value;
-    const conPassword = conPassRef.current?.value;
 
-    if (password !== conPassword) {
-      alert("Password do not match");
-      return;
-    }
+    console.log(email, password);
 
-    console.log(name, email, password);
-
-    if (nameRef.current) nameRef.current.value = "";
     if (emailRef.current) emailRef.current.value = "";
     if (passRef.current) passRef.current.value = "";
-    if (conPassRef.current) conPassRef.current.value = "";
-
-    router.push("/");
   }
 
   return (
     <section className=" flex justify-center items-center h-screen bg-stone-400">
       <div className="flex flex-col justify-center items-center bg-stone-900 rounded-xl p-4 w-[30rem]">
-        <h1 className="text-stone-200 text-2xl">Signup</h1>
+        <h1 className="text-stone-200 text-2xl">Login</h1>
 
         <form onSubmit={handleSubmit}>
-          <input
-            ref={nameRef}
-            type="text"
-            placeholder="Name"
-            className="w-full px-4 py-2 mt-4 rounded-sm focus:outline-none"
-          />
           <input
             ref={emailRef}
             type="email"
@@ -56,26 +33,20 @@ const Page = () => {
             placeholder="Password"
             className="w-full px-4 py-2 mt-4 rounded-sm focus:outline-none"
           />
-          <input
-            ref={conPassRef}
-            type="password"
-            placeholder="Confirm Password"
-            className="w-full px-4 py-2 mt-4 rounded-sm focus:outline-none"
-          />
           <button
             type="submit"
             className="w-full px-4 py-2 mt-4 bg-stone-500 text-stone-100 rounded-sm hover:bg-stone-600 transition-colors"
           >
-            Sign up
+            Login
           </button>
 
           <div className="flex gap-2 mt-4">
-            <p className=" text-stone-200">Already have an account? </p>
+            <p className=" text-stone-200">Don&apos;t have an account? </p>
             <Link
-              href="Login"
+              href="Signup"
               className="text-stone-200 hover:text-stone-400 transition-all"
             >
-              Login
+              Sign up
             </Link>
           </div>
         </form>
@@ -84,4 +55,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default Login;

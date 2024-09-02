@@ -2,7 +2,6 @@ import { Project } from "@/lib/models";
 import { projectActions } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "./Button";
-import SideBarBottom from "./SideBarBottom";
 
 const ProjectsSidebar = () => {
   const dispatch = useDispatch();
@@ -47,7 +46,9 @@ const ProjectsSidebar = () => {
             );
           })}
         </ul>
-        <SideBarBottom />
+        <div className="flex items-center justify-end mt-auto">
+          <button className="transition-colors text-stone-200 hover:text-stone-400 ml-2 mr-auto">Logout</button>
+        </div>
       </aside>
     </>
   );

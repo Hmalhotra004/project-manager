@@ -1,4 +1,5 @@
 "use client";
+import Login from "@/components/Login";
 import NewProject from "@/components/NewProject";
 import NoProjectSelected from "@/components/NoProjectSelected";
 import ProjectsSidebar from "@/components/ProjectsSidebar";
@@ -7,6 +8,7 @@ import { Project } from "@/lib/models";
 import { useSelector } from "react-redux";
 
 const Home = () => {
+  const user = true;
   const currAction = useSelector((state: { currAction: string }) => state.currAction);
   const projects: Project[] = useSelector((state: { projects: Project[] }) => state.projects);
   const selectedProjectId: undefined | number = useSelector((state: { selectedProjectId: undefined | number }) => state.selectedProjectId);
@@ -25,10 +27,13 @@ const Home = () => {
 
   return (
     <>
-      <main className="flex h-screen w-screen gap-8">
-        <ProjectsSidebar />
-        {content}
-      </main>
+      {!user && <Login />}
+      {user && (
+        <main className="flex h-screen w-screen gap-8">
+          <ProjectsSidebar />
+          {content}
+        </main>
+      )}
     </>
   );
 };
