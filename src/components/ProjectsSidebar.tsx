@@ -1,12 +1,14 @@
 import { Project } from "@/lib/models";
+import { logOut } from "@/store/authSlice";
 import { projectActions } from "@/store/projectslice";
+import { AppDispatch } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "./Button";
 
 const ProjectsSidebar = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
-  const projects: Project[] = useSelector((state: {project: { projects: Project[] }}) => state.project.projects);
+  const projects: Project[] = useSelector((state: { project: { projects: Project[] } }) => state.project.projects);
   const selectedProjectId: undefined | number = useSelector((state: { project: { selectedProjectId: undefined | number } }) => state.project.selectedProjectId);
 
   function handleSelectClick(id: number) {
@@ -15,6 +17,10 @@ const ProjectsSidebar = () => {
 
   function handleAddClick() {
     dispatch(projectActions.StartAddProject());
+  }
+
+  function handleLogOut() {
+    dispatch(logOut());
   }
 
   return (
@@ -47,7 +53,12 @@ const ProjectsSidebar = () => {
           })}
         </ul>
         <div className="flex items-center justify-end mt-auto">
-          <button className="transition-colors text-stone-200 hover:text-stone-400 ml-2 mr-auto">Logout</button>
+          <button
+            onClick={handleLogOut}
+            className="transition-colors text-stone-200 hover:text-stone-400 ml-2 mr-auto"
+          >
+            Logout
+          </button>
         </div>
       </aside>
     </>

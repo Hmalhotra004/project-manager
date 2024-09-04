@@ -5,15 +5,14 @@ import NoProjectSelected from "@/components/NoProjectSelected";
 import ProjectsSidebar from "@/components/ProjectsSidebar";
 import SelectedProject from "@/components/SelectedProject";
 import { Project } from "@/lib/models";
-import AuthContextProvider, { AuthContext } from "@/store/AuthContext";
-import { useContext } from "react";
+import { User } from "firebase/auth";
 import { useSelector } from "react-redux";
 
 const Home = () => {
-  const { user } = useContext(AuthContext);
   const currAction = useSelector((state: { project: { currAction: string } }) => state.project.currAction);
   const projects: Project[] = useSelector((state: { project: { projects: Project[] } }) => state.project.projects);
   const selectedProjectId: undefined | number = useSelector((state: { project: { selectedProjectId: undefined | number } }) => state.project.selectedProjectId);
+  const user = useSelector((state: { Auth: { user: User | null } }) => state.Auth.user);
 
   let content;
 
@@ -28,15 +27,16 @@ const Home = () => {
   }
 
   return (
-    <AuthContextProvider>
-      {!user && <Login />}
-      {user && (
+    <>
+      {user == null ? (
+        <Login />
+      ) : (
         <main className="flex h-screen w-screen gap-8">
           <ProjectsSidebar />
           {content}
         </main>
       )}
-    </AuthContextProvider>
+    </>
   );
 };
 
