@@ -1,10 +1,12 @@
+import { AuthContext } from "@/store/AuthContext";
 import Link from "next/link";
-import { FormEvent, useRef } from "react";
+import { FormEvent, useContext, useRef } from "react";
 import { useDispatch } from "react-redux";
 
 const Login = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
+  const { googleSignIn } = useContext(AuthContext);
   const dispatch = useDispatch();
 
   function handlegoogleSignIn() {
@@ -57,7 +59,7 @@ const Login = () => {
             </Link>
           </div>
         </form>
-        <button onClick={handlegoogleSignIn}>GOOFGLe</button>
+        <button onClick={googleSignIn}>GOOFGLe</button>
       </div>
     </section>
   );

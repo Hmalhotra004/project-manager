@@ -4,7 +4,7 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { createContext, useEffect, useState } from "react";
 
 type Modal = {
-  user: User | null;
+  user: User | null | boolean;
   googleSignIn: () => void;
   logOut: () => void;
   handleSignUp: (name: Form, email: Form, pass: Form) => void;
@@ -22,7 +22,7 @@ export const AuthContext = createContext<Modal>({
 });
 
 const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null | boolean>(null);
 
   const googleSignIn = () => {
     const provider = new GoogleAuthProvider();
