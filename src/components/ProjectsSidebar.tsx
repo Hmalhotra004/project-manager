@@ -1,13 +1,13 @@
 import { Project } from "@/lib/models";
-import { projectActions } from "@/store/store";
+import { projectActions } from "@/store/projectslice";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "./Button";
 
 const ProjectsSidebar = () => {
   const dispatch = useDispatch();
 
-  const projects: Project[] = useSelector((state: { projects: Project[] }) => state.projects);
-  const selectedProjectId: undefined | number = useSelector((state: { selectedProjectId: undefined | number }) => state.selectedProjectId);
+  const projects: Project[] = useSelector((state: {project: { projects: Project[] }}) => state.project.projects);
+  const selectedProjectId: undefined | number = useSelector((state: { project: { selectedProjectId: undefined | number } }) => state.project.selectedProjectId);
 
   function handleSelectClick(id: number) {
     dispatch(projectActions.SelectProject(id));

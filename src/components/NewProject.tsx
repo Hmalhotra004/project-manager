@@ -1,5 +1,5 @@
 import { Project } from "@/lib/models";
-import { projectActions } from "@/store/store";
+import { projectActions } from "@/store/projectslice";
 import { useRef } from "react";
 import { useDispatch } from "react-redux";
 import Input from "./Input";

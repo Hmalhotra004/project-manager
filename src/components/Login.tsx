@@ -1,12 +1,15 @@
-import { AuthContext } from "@/store/AuthContext";
 import Link from "next/link";
-import { FormEvent, useContext, useRef } from "react";
+import { FormEvent, useRef } from "react";
+import { useDispatch } from "react-redux";
 
 const Login = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
+  const dispatch = useDispatch();
 
-  const { googleSignIn } = useContext(AuthContext);
+  function handlegoogleSignIn() {
+    // dispatch(googleSignIn());
+  }
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -54,7 +57,7 @@ const Login = () => {
             </Link>
           </div>
         </form>
-        <button onClick={googleSignIn}>GOOFGLe</button>
+        <button onClick={handlegoogleSignIn}>GOOFGLe</button>
       </div>
     </section>
   );

@@ -1,5 +1,5 @@
 "use client";
-import { projectActions } from "@/store/store";
+import { projectActions } from "@/store/projectslice";
 import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
 import Button from "./Button";

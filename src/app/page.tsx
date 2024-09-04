@@ -11,9 +11,9 @@ import { useSelector } from "react-redux";
 
 const Home = () => {
   const { user } = useContext(AuthContext);
-  const currAction = useSelector((state: { currAction: string }) => state.currAction);
-  const projects: Project[] = useSelector((state: { projects: Project[] }) => state.projects);
-  const selectedProjectId: undefined | number = useSelector((state: { selectedProjectId: undefined | number }) => state.selectedProjectId);
+  const currAction = useSelector((state: { project: { currAction: string } }) => state.project.currAction);
+  const projects: Project[] = useSelector((state: { project: { projects: Project[] } }) => state.project.projects);
+  const selectedProjectId: undefined | number = useSelector((state: { project: { selectedProjectId: undefined | number } }) => state.project.selectedProjectId);
 
   let content;
 

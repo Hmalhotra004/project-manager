@@ -1,11 +1,11 @@
-import { projectActions } from "@/store/store";
+import { projectActions } from "@/store/projectslice";
 import { ChangeEvent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const NewTask = () => {
   const [enteredTask, setEnteredTask] = useState<string>("");
 
-  const selectedProjectId: undefined | number = useSelector((state: { selectedProjectId: undefined | number }) => state.selectedProjectId);
+  const selectedProjectId: undefined | number = useSelector((state: { project: { selectedProjectId: undefined | number } }) => state.project.selectedProjectId);
   const dispatch = useDispatch();
 
   function addTask() {

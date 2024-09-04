@@ -1,5 +1,5 @@
 import { ProjectData } from "@/lib/models";
-import { projectActions } from "@/store/store";
+import { projectActions } from "@/store/projectslice";
 import { useDispatch } from "react-redux";
 import Tasks from "./Tasks";
 
