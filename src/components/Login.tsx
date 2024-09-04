@@ -1,9 +1,13 @@
+import { AuthContext } from "@/store/AuthContext";
 import Link from "next/link";
-import React, { FormEvent, useRef } from "react";
+import { FormEvent, useContext, useRef } from "react";
 
 const Login = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
+
+  const { googleSignIn } = useContext(AuthContext);
+
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
     const email = emailRef.current?.value;
@@ -50,6 +54,7 @@ const Login = () => {
             </Link>
           </div>
         </form>
+        <button onClick={googleSignIn}>GOOFGLe</button>
       </div>
     </section>
   );
