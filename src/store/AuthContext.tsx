@@ -1,4 +1,4 @@
-import auth, { db } from "@/firebase/firebase";
+import auth, { db } from "@/firebase/config";
 import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, User } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { createContext, useEffect, useState } from "react";

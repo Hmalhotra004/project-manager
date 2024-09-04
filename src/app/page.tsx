@@ -13,6 +13,7 @@ const Home = () => {
   const projects: Project[] = useSelector((state: { project: { projects: Project[] } }) => state.project.projects);
   const selectedProjectId: undefined | number = useSelector((state: { project: { selectedProjectId: undefined | number } }) => state.project.selectedProjectId);
   const user = useSelector((state: { Auth: { user: User | null } }) => state.Auth.user);
+  const user1 = true;
 
   let content;
 

@@ -1,4 +1,4 @@
-import auth from "@/firebase/firebase";
+import auth from "@/firebase/config";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { GoogleAuthProvider, signInWithPopup, signOut, User } from "firebase/auth";
 

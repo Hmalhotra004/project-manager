@@ -55,7 +55,7 @@ const ProjectsSidebar = () => {
         <div className="flex items-center justify-end mt-auto">
           <button
             onClick={handleLogOut}
-            className="transition-colors text-stone-200 hover:text-stone-400 ml-2 mr-auto"
+            className="transition-colors text-stone-200 hover:text-stone-400 mx-auto"
           >
             Logout
           </button>
