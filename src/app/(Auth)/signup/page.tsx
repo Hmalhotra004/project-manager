@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { FormEvent, useRef } from "react";
 
 const Page = () => {
@@ -8,7 +8,6 @@ const Page = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
   const conPassRef = useRef<HTMLInputElement>(null);
-  const router = useRouter();
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -29,7 +28,7 @@ const Page = () => {
     if (passRef.current) passRef.current.value = "";
     if (conPassRef.current) conPassRef.current.value = "";
 
-    router.push("/");
+    redirect("/");
   }
 
   return (

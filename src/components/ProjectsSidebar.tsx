@@ -1,7 +1,7 @@
-import { Project } from "@/lib/models";
-import { logOut } from "@/store/authSlice";
+"use client";
 import { projectActions } from "@/store/projectslice";
 import { AppDispatch } from "@/store/store";
+import { Project } from "@/types";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "./Button";
 
@@ -19,16 +19,12 @@ const ProjectsSidebar = () => {
     dispatch(projectActions.StartAddProject());
   }
 
-  function handleLogOut() {
-    dispatch(logOut());
-  }
-
   return (
     <>
       <aside className="w-1/3 px-6 pt-8 pb-4 bg-stone-900 text-stone-50 md:w-72 h-screen flex flex-col">
-        <h2 className="mb-4 font-bold uppercase md:text-xl text-stone-200">Your Projects</h2>
+        <h2 className="mb-4 font-bold uppercase md:text-xl text-stone-200">Your Tasks</h2>
         <div>
-          <Button onClick={handleAddClick}>+ Add Project</Button>
+          <Button onClick={handleAddClick}>+ Add Tasks</Button>
         </div>
         <ul className="my-4 overflow-y-scroll">
           {projects.map(project => {
@@ -52,14 +48,14 @@ const ProjectsSidebar = () => {
             );
           })}
         </ul>
-        <div className="flex items-center justify-end mt-auto">
+        {/* <div className="flex items-center justify-end mt-auto">
           <button
-            onClick={handleLogOut}
+            // onClick={handleLogOut}
             className="transition-colors text-stone-200 hover:text-stone-400 mx-auto"
           >
             Logout
           </button>
-        </div>
+        </div> */}
       </aside>
     </>
   );

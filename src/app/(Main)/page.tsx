@@ -1,19 +1,16 @@
 "use client";
-import Login from "@/components/Login";
+import Login from "@/app/(Auth)/login/page";
 import NewProject from "@/components/NewProject";
 import NoProjectSelected from "@/components/NoProjectSelected";
-import ProjectsSidebar from "@/components/ProjectsSidebar";
 import SelectedProject from "@/components/SelectedProject";
-import { Project } from "@/lib/models";
-import { User } from "firebase/auth";
+import { Project } from "@/types";
 import { useSelector } from "react-redux";
 
 const Home = () => {
   const currAction = useSelector((state: { project: { currAction: string } }) => state.project.currAction);
   const projects: Project[] = useSelector((state: { project: { projects: Project[] } }) => state.project.projects);
   const selectedProjectId: undefined | number = useSelector((state: { project: { selectedProjectId: undefined | number } }) => state.project.selectedProjectId);
-  const user = useSelector((state: { Auth: { user: User | null } }) => state.Auth.user);
-  const user1 = true;
+  const user = "";
 
   let content;
 
@@ -27,18 +24,7 @@ const Home = () => {
     content = selectedProject ? <SelectedProject project={selectedProject} /> : <NoProjectSelected />;
   }
 
-  return (
-    <>
-      {user == null ? (
-        <Login />
-      ) : (
-        <main className="flex h-screen w-screen gap-8">
-          <ProjectsSidebar />
-          {content}
-        </main>
-      )}
-    </>
-  );
+  return <>{user == null ? <Login /> : <main>{content}</main>}</>;
 };
 
 export default Home;

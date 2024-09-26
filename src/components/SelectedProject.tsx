@@ -1,4 +1,4 @@
-import { ProjectData } from "@/lib/models";
+import { ProjectData } from "@/types";
 import { projectActions } from "@/store/projectslice";
 import { useDispatch } from "react-redux";
 import Tasks from "./Tasks";

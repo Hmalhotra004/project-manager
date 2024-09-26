@@ -1,6 +1,6 @@
-import { googleSignIn } from "@/store/authSlice";
 import { AppDispatch } from "@/store/store";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { FormEvent, useRef } from "react";
 import { useDispatch } from "react-redux";
 
@@ -9,19 +9,17 @@ const Login = () => {
   const passRef = useRef<HTMLInputElement>(null);
   const dispatch = useDispatch<AppDispatch>();
 
-  function handlegoogleSignIn() {
-    dispatch(googleSignIn());
-  }
-
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
+
+    redirect("/");
     const email = emailRef.current?.value;
     const password = passRef.current?.value;
 
     console.log(email, password);
 
-    if (emailRef.current) emailRef.current.value = "";
-    if (passRef.current) passRef.current.value = "";
+    // if (emailRef.current) emailRef.current.value = "";
+    // if (passRef.current) passRef.current.value = "";
   }
 
   return (
@@ -59,7 +57,6 @@ const Login = () => {
             </Link>
           </div>
         </form>
-        <button onClick={handlegoogleSignIn}>GOOFGLe</button>
       </div>
     </section>
   );

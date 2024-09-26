@@ -1,4 +1,4 @@
-import { Project } from "@/lib/models";
+import { Project } from "@/types";
 import { projectActions } from "@/store/projectslice";
 import { useRef } from "react";
 import { useDispatch } from "react-redux";

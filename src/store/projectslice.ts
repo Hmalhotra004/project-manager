@@ -1,4 +1,4 @@
-import { State } from "@/lib/models";
+import { State } from "@/types";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState: State = {
