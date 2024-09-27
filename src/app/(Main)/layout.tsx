@@ -2,9 +2,9 @@ import ProjectsSidebar from "@/components/ProjectsSidebar";
 
 const Home = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex h-screen w-screen gap-8">
+    <div className="flex h-screen w-screen">
       <ProjectsSidebar />
-      {children}
+      <div className="flex mx-auto">{children}</div>
     </div>
   );
 };
