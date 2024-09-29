@@ -1,3 +1,4 @@
+"use client";
 import { AppDispatch } from "@/store/store";
 import Link from "next/link";
 import { redirect } from "next/navigation";
