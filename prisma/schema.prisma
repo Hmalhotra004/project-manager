@@ -13,3 +13,17 @@ model Users {
   email     String   @unique
   password  String
 }
+
+model Projects {
+  id Int @id @default(autoincrement())
+  name String
+  description String
+  dueDate DateTime
+  completed Boolean @default(false)
+}
+
+model Tasks {
+  id Int @id @default(autoincrement())
+  name String
+  completed Boolean @default(false)
+}
