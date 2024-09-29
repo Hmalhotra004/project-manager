@@ -1,3 +1,4 @@
+"use client";
 import { projectActions } from "@/store/projectslice";
 import { Task } from "@/types";
 import { useDispatch, useSelector } from "react-redux";

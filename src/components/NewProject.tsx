@@ -1,3 +1,4 @@
+"use client";
 import { Project } from "@/types";
 import { projectActions } from "@/store/projectslice";
 import { useRef } from "react";

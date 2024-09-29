@@ -1,3 +1,4 @@
+"use client";
 import { ProjectData } from "@/types";
 import { projectActions } from "@/store/projectslice";
 import { useDispatch } from "react-redux";

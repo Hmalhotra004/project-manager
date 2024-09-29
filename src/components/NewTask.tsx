@@ -1,3 +1,4 @@
+"use client";
 import { projectActions } from "@/store/projectslice";
 import { ChangeEvent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
