@@ -9,22 +9,28 @@ datasource db {
 }
 
 model Users {
-  id        String   @id @default(uuid())
-  username  String   
-  email     String   @unique
-  password  String
+  id       String     @id @default(uuid())
+  username String
+  email    String     @unique
+  password String
+  projects Projects[]
 }
 
 model Projects {
-  id Int @id @default(autoincrement())
-  name String
+  id          String   @id @default(uuid())
+  name        String   @unique
   description String
-  dueDate DateTime
-  completed Boolean @default(false)
+  dueDate     DateTime
+  completed   Boolean  @default(false)
+  user        Users    @relation(fields: [userId], references: [id])
+  userId      String
+  tasks       Tasks[]
 }
 
 model Tasks {
-  id Int @id @default(autoincrement())
-  name String
-  completed Boolean @default(false)
+  id        String   @id @default(uuid())
+  name      String   @unique
+  completed Boolean  @default(false)
+  project   Projects @relation(fields: [projectId], references: [id])
+  projectId String
 }
