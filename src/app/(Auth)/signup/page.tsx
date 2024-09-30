@@ -1,10 +1,11 @@
 "use client";
 import axios from "axios";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/router";
 import { FormEvent, useRef, useState } from "react";
 
 const Page = () => {
+  const router = useRouter();
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
@@ -19,12 +20,17 @@ const Page = () => {
     const conPassword = conPassRef.current?.value;
 
     if (!password || !conPassword) {
-      alert("Password and confirm password fields cannot be empty.");
+      setErrorMessage("Password and confirm password fields cannot be empty.");
       return;
     }
 
     if (password !== conPassword) {
       setErrorMessage("Passwords do not match.");
+      return;
+    }
+
+    if (!name || !email) {
+      setErrorMessage("Name and email fields cannot be empty.");
       return;
     }
 
@@ -35,17 +41,16 @@ const Page = () => {
     };
 
     try {
-      await axios("/api/users", values);
+      await axios.post("/api/users", values);
+      if (nameRef.current) nameRef.current.value = "";
+      if (emailRef.current) emailRef.current.value = "";
+      if (passRef.current) passRef.current.value = "";
+      if (conPassRef.current) conPassRef.current.value = "";
+      router.push("/");
     } catch (err) {
       console.log(err);
+      setErrorMessage("Failed to sign up. Please try again.");
     }
-
-    if (nameRef.current) nameRef.current.value = "";
-    if (emailRef.current) emailRef.current.value = "";
-    if (passRef.current) passRef.current.value = "";
-    if (conPassRef.current) conPassRef.current.value = "";
-
-    redirect("/");
   };
 
   return (
