@@ -1,7 +1,7 @@
 "use client";
 import axios from "axios";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { FormEvent, useRef, useState } from "react";
 
 const Page = () => {
@@ -46,7 +46,7 @@ const Page = () => {
       if (emailRef.current) emailRef.current.value = "";
       if (passRef.current) passRef.current.value = "";
       if (conPassRef.current) conPassRef.current.value = "";
-      router.push("/");
+      router.refresh();
     } catch (err) {
       console.log(err);
       setErrorMessage("Failed to sign up. Please try again.");
@@ -96,7 +96,7 @@ const Page = () => {
           <div className="flex gap-2 mt-4">
             <p className="text-stone-200">Already have an account? </p>
             <Link
-              href="Login"
+              href="login"
               className="text-stone-200 hover:text-stone-400 transition-all"
             >
               Login

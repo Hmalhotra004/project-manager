@@ -1,6 +1,7 @@
 import db from "@/lib/db";
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
+// import { v4 as uuid4 } from "uuid";
 
 export async function POST(req: Request) {
   try {
@@ -9,7 +10,7 @@ export async function POST(req: Request) {
     const saltRounds = 10;
     const hashPwd = await bcrypt.hash(password, saltRounds);
 
-    const user = db.users.create({
+    const user = await db.users.create({
       data: {
         username: name,
         email,
