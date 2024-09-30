@@ -5,7 +5,7 @@ import { Provider } from "react-redux";
 import "./globals.css";
 require("dotenv").config();
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], weight: ["100", "200", "300", "400"] });
 
 export default function RootLayout({
   children,

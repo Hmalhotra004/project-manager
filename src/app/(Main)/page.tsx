@@ -1,16 +1,18 @@
 "use client";
-import Login from "@/app/(Auth)/login/page";
 import NewProject from "@/components/NewProject";
 import NoProjectSelected from "@/components/NoProjectSelected";
 import SelectedProject from "@/components/SelectedProject";
 import { Project } from "@/types";
+import { redirect } from "next/navigation";
 import { useSelector } from "react-redux";
 
 const Home = () => {
+  const user = false;
   const currAction = useSelector((state: { project: { currAction: string } }) => state.project.currAction);
   const projects: Project[] = useSelector((state: { project: { projects: Project[] } }) => state.project.projects);
   const selectedProjectId: undefined | number = useSelector((state: { project: { selectedProjectId: undefined | number } }) => state.project.selectedProjectId);
-  const user = "";
+
+  if (!user) return redirect("/login");
 
   let content;
 
@@ -24,7 +26,7 @@ const Home = () => {
     content = selectedProject ? <SelectedProject project={selectedProject} /> : <NoProjectSelected />;
   }
 
-  return <>{user == null ? <Login /> : <main>{content}</main>}</>;
+  return <main>{content}</main>;
 };
 
 export default Home;

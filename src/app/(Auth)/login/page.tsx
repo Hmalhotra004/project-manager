@@ -1,14 +1,14 @@
 "use client";
-import { AppDispatch } from "@/store/store";
+// import { AppDispatch } from "@/store/store";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { FormEvent, useRef } from "react";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 
 const Login = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passRef = useRef<HTMLInputElement>(null);
-  const dispatch = useDispatch<AppDispatch>();
+  // const dispatch = useDispatch<AppDispatch>();
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -51,7 +51,7 @@ const Login = () => {
           <div className="flex gap-2 mt-4">
             <p className=" text-stone-200">Don&apos;t have an account? </p>
             <Link
-              href="Signup"
+              href="signup"
               className="text-stone-200 hover:text-stone-400 transition-all"
             >
               Sign up
