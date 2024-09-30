@@ -41,12 +41,12 @@ const Page = () => {
     };
 
     try {
-      await axios.post("/api/users", values);
+      await axios.post("/api/users/signup", values);
       if (nameRef.current) nameRef.current.value = "";
       if (emailRef.current) emailRef.current.value = "";
       if (passRef.current) passRef.current.value = "";
       if (conPassRef.current) conPassRef.current.value = "";
-      router.refresh();
+      router.push("/");
     } catch (err) {
       console.log(err);
       setErrorMessage("Failed to sign up. Please try again.");
