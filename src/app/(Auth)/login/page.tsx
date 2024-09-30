@@ -64,6 +64,7 @@ const Login = () => {
             placeholder="Email"
             className="w-full px-4 py-2 mt-4 rounded-sm focus:outline-none"
             onFocus={handleInputChange}
+            value="hmalhotra@gmail.com"
           />
           <input
             ref={passRef}
@@ -71,6 +72,7 @@ const Login = () => {
             placeholder="Password"
             className="w-full px-4 py-2 mt-4 rounded-sm focus:outline-none"
             onFocus={handleInputChange}
+            value="pass@123"
           />
 
           {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}

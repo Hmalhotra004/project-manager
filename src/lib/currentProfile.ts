@@ -1,44 +1,39 @@
-// hooks/useAuth.ts
-import { Users } from "@prisma/client";
-import cookie from "cookie";
-import jwt, { JwtPayload } from "jsonwebtoken";
-import { useEffect, useState } from "react";
+import db from "@/lib/db"; // Make sure to correctly import your Prisma client
+import jwt from "jsonwebtoken";
+import { NextResponse } from "next/server";
 
-interface User extends JwtPayload {
-  user: Users;
+//todo:fixme
+export default async function currentProfile() {
+  try {
+    const token = sessionStorage.getItem("token");
+
+    if (!token) {
+      return NextResponse.redirect("/login");
+    }
+
+    // Verify and decode the JWT token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { id: string; email: string };
+
+    const { userId, email } = decoded;
+
+    if (!userId) {
+      return NextResponse.redirect("/login");
+    }
+
+    // Find the user in the database
+    const user = await db.users.findUnique({
+      where: { id: userId },
+    });
+
+    // If no user found, redirect to the login page
+    if (!user) {
+      return NextResponse.redirect("/login");
+    }
+
+    // Return the user profile if found
+    return NextResponse.json(user);
+  } catch (err) {
+    console.error("Error fetching current profile:", err);
+    return new NextResponse("Internal Error", { status: 500 });
+  }
 }
-
-const secret = "ykjasbfjafijafiuhqiufhf";
-
-const useAuth = (): { user: User | null; loading: boolean; error: string | null } => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const parseToken = () => {
-      try {
-        const cookies = cookie.parse(document.cookie); // Get cookies from the document
-        const token = cookies.token; // Access your JWT token
-
-        if (token) {
-          const decodedUser = jwt.verify(token, secret) as User; // Decode the token to get user data
-          setUser(decodedUser);
-        } else {
-          setUser(null); // No token found
-        }
-      } catch (err) {
-        setError("Failed to verify token");
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    parseToken();
-  }, []);
-
-  return { user, loading, error };
-};
-
-export default useAuth;

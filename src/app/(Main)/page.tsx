@@ -2,19 +2,20 @@
 import NewProject from "@/components/NewProject";
 import NoProjectSelected from "@/components/NoProjectSelected";
 import SelectedProject from "@/components/SelectedProject";
-import useAuth from "@/lib/currentProfile";
 import { Project } from "@/types";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
+import currentProfile from "../../lib/currentProfile";
 
 const Home = () => {
-  // const user = axios.get("api/users");
-  const { user } = useAuth();
+  const user = currentProfile();
+
   const currAction = useSelector((state: { project: { currAction: string } }) => state.project.currAction);
   const projects: Project[] = useSelector((state: { project: { projects: Project[] } }) => state.project.projects);
   const selectedProjectId: undefined | number = useSelector((state: { project: { selectedProjectId: undefined | number } }) => state.project.selectedProjectId);
+  const router = useRouter();
 
-  if (!user) return redirect("/login");
+  if (!user) return router.push("/login");
 
   let content;
 

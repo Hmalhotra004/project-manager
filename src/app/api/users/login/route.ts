@@ -1,13 +1,9 @@
 import db from "@/lib/db";
 import bcrypt from "bcryptjs";
-import cookie from "cookie";
 import jwt from "jsonwebtoken";
-import { NextApiResponse } from "next";
 import { NextRequest, NextResponse } from "next/server";
 
-const secret = "ykjasbfjafijafiuhqiufhf";
-
-export async function POST(req: NextRequest, res: NextApiResponse) {
+export async function POST(req: NextRequest) {
   try {
     const { email, password } = await req.json();
 
@@ -23,21 +19,19 @@ export async function POST(req: NextRequest, res: NextApiResponse) {
 
     if (!isMatch) return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
 
-    const token = jwt.sign({ email }, secret, { expiresIn: "1h" });
+    const token = jwt.sign(user, process.env.JWT_SECRET as string, { expiresIn: "1h" });
 
-    // Set the cookie
-    res.setHeader(
-      "Set-Cookie",
-      cookie.serialize("token", token, {
-        httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
-        secure: process.env.NODE_ENV === "production", // Use secure cookies in production
-        maxAge: 60 * 60 * 24 * 30, // 1 month
-        sameSite: "strict", // Prevent CSRF attacks
-        path: "/", // Cookie is accessible throughout the site
-      })
-    );
+    const response = NextResponse.json({ message: "Login successful", user });
 
-    return NextResponse.json({ message: "Login successful", user });
+    response.cookies.set("token", token, {
+      httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
+      secure: process.env.NODE_ENV === "production", // Ensures cookies are sent over HTTPS in production
+      maxAge: 60 * 60, // 1 hour in seconds
+      path: "/", // Cookie is accessible across the site
+      sameSite: "strict", // Prevents CSRF attacks
+    });
+
+    return response;
   } catch (err) {
     console.log("[users]", err);
     return new NextResponse("Internal Error", { status: 500 });
