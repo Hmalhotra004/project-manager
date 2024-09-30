@@ -1,18 +1,44 @@
-// import db  from "@/lib/db";
-// import { auth } from "@clerk/nextjs/server";
+// hooks/useAuth.ts
+import { Users } from "@prisma/client";
+import cookie from "cookie";
+import jwt, { JwtPayload } from "jsonwebtoken";
+import { useEffect, useState } from "react";
 
-// const currentProfile = async () => {
-//   const { userId } = auth();
+interface User extends JwtPayload {
+  user: Users;
+}
 
-//   if (!userId) return null;
+const secret = "ykjasbfjafijafiuhqiufhf";
 
-//   const profile = await db.profile.findUnique({
-//     where: {
-//       userId: userId,
-//     },
-//   });
+const useAuth = (): { user: User | null; loading: boolean; error: string | null } => {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-//   return profile;
-// };
+  useEffect(() => {
+    const parseToken = () => {
+      try {
+        const cookies = cookie.parse(document.cookie); // Get cookies from the document
+        const token = cookies.token; // Access your JWT token
 
-// export default currentProfile;
+        if (token) {
+          const decodedUser = jwt.verify(token, secret) as User; // Decode the token to get user data
+          setUser(decodedUser);
+        } else {
+          setUser(null); // No token found
+        }
+      } catch (err) {
+        setError("Failed to verify token");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    parseToken();
+  }, []);
+
+  return { user, loading, error };
+};
+
+export default useAuth;

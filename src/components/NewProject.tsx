@@ -1,7 +1,7 @@
 "use client";
-import { Project } from "@/types";
 import { projectActions } from "@/store/projectslice";
-import { useRef } from "react";
+import { Project } from "@/types";
+import React, { useRef } from "react";
 import { useDispatch } from "react-redux";
 import Input from "./Input";
 import Modal, { ModalHandle } from "./Modal";
@@ -44,7 +44,7 @@ const NewProject = () => {
   };
 
   return (
-    <>
+    <React.Fragment>
       <Modal
         ref={modal}
         btnCap="Close"
@@ -98,7 +98,7 @@ const NewProject = () => {
           />
         </div>
       </form>
-    </>
+    </React.Fragment>
   );
 };
 
