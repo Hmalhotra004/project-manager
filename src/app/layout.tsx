@@ -3,7 +3,7 @@ import store from "@/store/store";
 import { Inter } from "next/font/google";
 import { Provider } from "react-redux";
 import "./globals.css";
-require("dotenv").config();
+// require("dotenv").config();
 
 const inter = Inter({ subsets: ["latin"], weight: ["100", "200", "300", "400"] });
 
