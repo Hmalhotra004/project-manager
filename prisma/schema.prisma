@@ -17,12 +17,12 @@ model Users {
 }
 
 model Projects {
-  projectId   String   @id @default(uuid())
-  name        String   @unique
+  projectId   String  @id @default(uuid())
+  name        String  @unique
   description String
-  dueDate     DateTime
-  completed   Boolean  @default(false)
-  user        Users    @relation(fields: [userId], references: [userId])
+  dueDate     String
+  completed   Boolean @default(false)
+  user        Users   @relation(fields: [userId], references: [userId])
   userId      String
   tasks       Tasks[]
 }

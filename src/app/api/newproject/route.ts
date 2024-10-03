@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
 
     if (!profile) return NextResponse.json({ error: "User not found" }, { status: 404 });
 
-    const project = db.projects.create({
+    const project = await db.projects.create({
       data: {
         name: title,
         description: desp,

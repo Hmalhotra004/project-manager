@@ -24,20 +24,18 @@ const NewProject = () => {
       return;
     }
 
-    try {
-      const response = await axios.post("/api/new-project", { title, desp, date });
+    const formattedDate = new Date(date).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
 
-      if (response.data.error) {
-        return;
-      } else {
-        router.push("/");
-      }
+    try {
+      await axios.post("/api/newproject", { title, desp, date: formattedDate });
+
+      router.push("/");
     } catch (err) {
-      if (axios.isAxiosError(err) && err.response) {
-        console.log(err.response.data.error || "Somthing went Wrong");
-      } else {
-        console.log("An unexpected error occurred. Please try again.");
-      }
+      console.log(err);
     }
   };
 
