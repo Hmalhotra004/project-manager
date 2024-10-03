@@ -1,46 +1,44 @@
 "use client";
-import { projectActions } from "@/store/projectslice";
-import { Project } from "@/types";
+import Input from "@/components/Input";
+import Modal, { ModalHandle } from "@/components/Modal";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 import React, { useRef } from "react";
-import { useDispatch } from "react-redux";
-import Input from "./Input";
-import Modal, { ModalHandle } from "./Modal";
 
 const NewProject = () => {
   const titleRef = useRef<HTMLInputElement>(null);
   const despRef = useRef<HTMLTextAreaElement>(null);
   const dateRef = useRef<HTMLInputElement>(null);
   const modal = useRef<ModalHandle>(null);
+  const router = useRouter();
 
-  const dispatch = useDispatch();
-
-  function handleCancelAddProject() {
-    dispatch(projectActions.CancelAddProject());
-  }
-
-  function handleAddProject(data: Project) {
-    dispatch(projectActions.AddProject({ id: data.id, title: data.title, desp: data.desp, date: data.date }));
-  }
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const title = titleRef.current?.value;
     const desp = despRef.current?.value;
     const date = dateRef.current?.value || "";
 
-    // if (title?.trim() === "" || date?.trim() === "" || desp?.trim() === "") {
-    //   modal.current?.open();
-    //   return;
-    // }
+    if (title?.trim() === "" || date?.trim() === "" || desp?.trim() === "") {
+      modal.current?.open();
+      return;
+    }
 
-    const id = Math.random();
-    handleAddProject({
-      id,
-      title,
-      desp,
-      date,
-    });
+    try {
+      const response = await axios.post("/api/new-project", { title, desp, date });
+
+      if (response.data.error) {
+        return;
+      } else {
+        router.push("/");
+      }
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response) {
+        console.log(err.response.data.error || "Somthing went Wrong");
+      } else {
+        console.log("An unexpected error occurred. Please try again.");
+      }
+    }
   };
 
   return (
@@ -60,13 +58,13 @@ const NewProject = () => {
       >
         <menu className="flex items-center justify-end gap-4 my-4">
           <li>
-            <button
+            <a
+              href="/"
               type="button"
-              onClick={handleCancelAddProject}
               className="text-stone-800 hover:text-stone-950 transition-colors"
             >
               Cancel
-            </button>
+            </a>
           </li>
           <li>
             <button
