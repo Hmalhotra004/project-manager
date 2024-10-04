@@ -1,22 +1,29 @@
 "use client";
-import React from "react";
-import { projectActions } from "@/store/projectslice";
-import { AppDispatch } from "@/store/store";
-import { Project } from "@/types";
 import { UserButton } from "@clerk/nextjs";
+import { Projects } from "@prisma/client";
+import axios from "axios";
 import { Trash2 } from "lucide-react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
 import Button from "./Button";
 import { ScrollArea } from "./ui/scroll-area";
 
-const ProjectsSidebar = () => {
-  const dispatch = useDispatch<AppDispatch>();
+const ProjectsSidebar = ({ initialProjects }: { initialProjects: Projects[] }) => {
+  const [projects, setProjects] = useState<Projects[]>(initialProjects);
 
-  const projects: Project[] = useSelector((state: { project: { projects: Project[] } }) => state.project.projects);
-  const selectedProjectId: undefined | number = useSelector((state: { project: { selectedProjectId: undefined | number } }) => state.project.selectedProjectId);
+  // Function to refetch projects after deletion
+  async function fetchProjects() {
+    const response = await axios.get("/api/projects/find");
+    setProjects(response.data);
+  }
 
-  function handleSelectClick(id: number) {
-    dispatch(projectActions.SelectProject(id));
+  // Function to handle deleting a project
+  async function handleDelete(projectId: string) {
+    try {
+      await axios.post(`/api/projects/delete`, { projectId });
+      await fetchProjects(); // Refetch projects after successful deletion
+    } catch (error) {
+      console.error("Error deleting project:", error);
+    }
   }
 
   return (
@@ -32,25 +39,26 @@ const ProjectsSidebar = () => {
           {projects.map(project => {
             let cssClass = "w-full text-left px-2 py-1 rounded-sm my-1 hover:text-stone-200 hover:bg-stone-800 transition-colors";
 
-            if (project.id === selectedProjectId) {
+            if (project.projectId === project.projectId) {
+              // this should be selected project id
               cssClass += " text-stone-200 bg-stone-800";
             } else {
               cssClass += " text-stone-400";
             }
 
             return (
-              <>
+              <li
+                key={project.projectId}
+                className={`${cssClass} flex cursor-pointer`}
+              >
+                <a href={`${project.projectId}`}>{project.name}</a>
                 <button
-                  onClick={() => handleSelectClick(project.id)}
-                  key={project.id}
-                  className={`${cssClass} flex`}
+                  className="ml-auto flex hover:text-rose-800 transition-all"
+                  onClick={() => handleDelete(project.projectId)}
                 >
-                  {project.title}
-                  <button className="ml-auto flex hover:text-rose-800 transition-all">
-                    <Trash2 className="text-xs" />
-                  </button>
+                  <Trash2 className="w-5" />
                 </button>
-              </>
+              </li>
             );
           })}
         </ul>
