@@ -3,24 +3,38 @@ import { UserButton } from "@clerk/nextjs";
 import { Projects } from "@prisma/client";
 import axios from "axios";
 import { Trash2 } from "lucide-react";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import Button from "./Button";
 import { ScrollArea } from "./ui/scroll-area";
 
-const ProjectsSidebar = ({ initialProjects }: { initialProjects: Projects[] }) => {
-  const [projects, setProjects] = useState<Projects[]>(initialProjects);
+const ProjectsSidebar = () => {
+  const [projects, setProjects] = useState<Projects[]>([]);
+  const router = useRouter();
+  const pathname = usePathname();
+  const pathSegments = pathname.split("/");
+  const projectIdFromPath = pathSegments.length > 1 ? pathSegments[1] : null;
 
-  // Function to refetch projects after deletion
-  async function fetchProjects() {
-    const response = await axios.get("/api/projects/find");
-    setProjects(response.data);
-  }
+  useEffect(() => {
+    async function fetchProjects() {
+      try {
+        const response = await axios.get("/api/projects/find");
+        setProjects(response.data.projects);
+        router.refresh();
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+      }
+    }
 
-  // Function to handle deleting a project
+    fetchProjects();
+  }, [router]);
+
   async function handleDelete(projectId: string) {
     try {
       await axios.post(`/api/projects/delete`, { projectId });
-      await fetchProjects(); // Refetch projects after successful deletion
+      const response = await axios.get("/api/projects/find");
+      setProjects(response.data.projects);
+      router.refresh();
     } catch (error) {
       console.error("Error deleting project:", error);
     }
@@ -39,12 +53,7 @@ const ProjectsSidebar = ({ initialProjects }: { initialProjects: Projects[] }) =
           {projects.map(project => {
             let cssClass = "w-full text-left px-2 py-1 rounded-sm my-1 hover:text-stone-200 hover:bg-stone-800 transition-colors";
 
-            if (project.projectId === project.projectId) {
-              // this should be selected project id
-              cssClass += " text-stone-200 bg-stone-800";
-            } else {
-              cssClass += " text-stone-400";
-            }
+            cssClass += project.projectId === projectIdFromPath ? " text-stone-200 bg-stone-800" : " text-stone-400";
 
             return (
               <li

@@ -34,6 +34,7 @@ const NewProject = () => {
       await axios.post("/api/newproject", { title, desp, date: formattedDate });
 
       router.push("/");
+      router.refresh();
     } catch (err) {
       console.log(err);
     }
