@@ -3,11 +3,12 @@ import Button from "./Button";
 
 type Props = {
   children: React.ReactNode;
-  btnCap: string;
+  btnCap?: string;
 };
 
 export type ModalHandle = {
   open: () => void;
+  close: () => void;
 };
 
 const Modal = forwardRef<ModalHandle, Props>(function Modal({ children, btnCap }, ref) {
@@ -18,6 +19,9 @@ const Modal = forwardRef<ModalHandle, Props>(function Modal({ children, btnCap }
       open() {
         dialog.current?.showModal();
       },
+      close() {
+        dialog.current?.close();
+      },
     };
   });
 
@@ -27,12 +31,14 @@ const Modal = forwardRef<ModalHandle, Props>(function Modal({ children, btnCap }
       className="backdrop:bg-stone-900/90 p-4 rounded-md shadow-md"
     >
       {children}
-      <form
-        method="dialog"
-        className="mt-4 text-right"
-      >
-        <Button>{btnCap}</Button>
-      </form>
+      {btnCap && (
+        <form
+          method="dialog"
+          className="mt-4 text-right"
+        >
+          <Button>{btnCap}</Button>
+        </form>
+      )}
     </dialog>
   );
 });
