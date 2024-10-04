@@ -31,10 +31,10 @@ const NewProject = () => {
     });
 
     try {
-      await axios.post("/api/newproject", { title, desp, date: formattedDate });
-
-      router.push("/");
+      const response = await axios.post("/api/newproject", { title, desp, date: formattedDate });
+      const id = response.data.project.projectId;
       router.refresh();
+      router.push(`/${id}`);
     } catch (err) {
       console.log(err);
     }
