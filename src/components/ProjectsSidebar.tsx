@@ -60,9 +60,14 @@ const ProjectsSidebar = () => {
                 key={project.projectId}
                 className={`${cssClass} flex cursor-pointer`}
               >
-                <a href={`${project.projectId}`}>{project.name}</a>
+                <a
+                  href={`${project.projectId}`}
+                  className="w-full"
+                >
+                  {project.name}
+                </a>
                 <button
-                  className="ml-auto flex hover:text-rose-800 transition-all"
+                  className="ml-auto flex hover:text-rose-800 transition-all z-50"
                   onClick={() => handleDelete(project.projectId)}
                 >
                   <Trash2 className="w-5" />
