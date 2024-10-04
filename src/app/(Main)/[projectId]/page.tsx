@@ -13,18 +13,18 @@ const SelectedProject = ({ params }: { params: { projectId: string } }) => {
   const projectIdFromPath = pathSegments.length > 1 ? pathSegments[1] : null;
 
   useEffect(() => {
-    async function fetchProject() {
-      if (!params.projectId) return;
+    async function fetchProjects() {
       try {
-        const response = await axios.get("/api/projects/details");
+        const response = await axios.post("/api/projects/details", { projectId: params.projectId });
         setProject(response.data.project);
+        router.refresh();
       } catch (error) {
-        console.error("Error fetching project:", error);
+        console.error("Error fetching projects:", error);
       }
     }
 
-    fetchProject();
-  }, [params.projectId]);
+    fetchProjects();
+  }, [router, params.projectId]);
 
   console.log(projectIdFromPath);
   const handleDelete = async () => {
