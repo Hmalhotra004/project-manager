@@ -1,4 +1,4 @@
-import { projectActions } from "@/store/store";
+import { projectActions } from "@/store/projectSlice";
 import { ChangeEvent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 

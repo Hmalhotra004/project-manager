@@ -1,14 +1,14 @@
-import { Task } from "@/lib/models";
-import { projectActions } from "@/store/store";
+import { projectActions } from "@/store/projectSlice";
+import { RootState } from "@/types";
 import { useDispatch, useSelector } from "react-redux";
 import NewTask from "./NewTask";
 
 const Tasks = () => {
-  const tasks = useSelector((state: { tasks: Task[] }) => state.tasks);
-  const selectedProjectId: undefined | number = useSelector((state: { selectedProjectId: undefined | number }) => state.selectedProjectId);
+  const tasks = useSelector((state: RootState) => state.tasks);
+  const selectedProjectId = useSelector((state: RootState) => state.selectedProjectId);
   const dispatch = useDispatch();
 
-  function deleteTask(id: number) {
+  function deleteTask(id: string) {
     dispatch(projectActions.DeleteTask(id));
   }
 

@@ -1,7 +1,8 @@
-import { Project } from "@/lib/models";
-import { projectActions } from "@/store/store";
+import { projectActions } from "@/store/projectSlice";
+import { Project } from "@/types";
 import { useRef } from "react";
 import { useDispatch } from "react-redux";
+import { v4 as uuidv4 } from "uuid";
 import Input from "./Input";
 import Modal, { ModalHandle } from "./Modal";
 
@@ -18,7 +19,14 @@ const NewProject = () => {
   }
 
   function handleAddProject(data: Project) {
-    dispatch(projectActions.AddProject({ id: data.id, title: data.title, desp: data.desp, date: data.date }));
+    dispatch(
+      projectActions.AddProject({
+        id: data.id,
+        title: data.title,
+        desp: data.desp,
+        date: data.date,
+      })
+    );
   }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -26,19 +34,20 @@ const NewProject = () => {
 
     const title = titleRef.current?.value;
     const desp = despRef.current?.value;
-    const date = dateRef.current?.value || "";
+    const date = dateRef.current?.value;
 
-    if (title?.trim() === "" || date?.trim() === "" || desp?.trim() === "") {
+    if (!title?.trim() || !desp?.trim() || !date?.trim()) {
       modal.current?.open();
       return;
     }
 
-    const id = Math.random();
+    const id = uuidv4();
+
     handleAddProject({
       id,
       title,
       desp,
-      date,
+      date: date,
     });
   };
 
@@ -49,8 +58,8 @@ const NewProject = () => {
         btnCap="Close"
       >
         <h2 className="text-xl font-bold text-stone-700 my-4">Invalid Input</h2>
-        <p className="text-stone-600 mb-4">Oops... looks like your forgot to enter a value. </p>
-        <p className="text-stone-600 mb-4">Please make sure sure you provide a valid entry for every input field.</p>
+        <p className="text-stone-600 mb-4">Oops... looks like you forgot to enter a value.</p>
+        <p className="text-stone-600 mb-4">Please make sure you provide a valid entry for every input field.</p>
       </Modal>
 
       <form
@@ -70,7 +79,7 @@ const NewProject = () => {
           <li>
             <button
               type="submit"
-              className="px-6 py-2 rounded-md bg-stone-800 text-stone-50 hover:bg-stone-950 transition-colors "
+              className="px-6 py-2 rounded-md bg-stone-800 text-stone-50 hover:bg-stone-950 transition-colors"
             >
               Save
             </button>
