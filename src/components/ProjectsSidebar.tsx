@@ -1,5 +1,6 @@
 import { Project } from "@/lib/models";
 import { projectActions } from "@/store/store";
+import { UserButton } from "@clerk/nextjs";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "./Button";
 
@@ -18,7 +19,7 @@ const ProjectsSidebar = () => {
   }
 
   return (
-    <aside className="w-1/3 px-8 py-16 bg-stone-900 text-stone-50 md:w-72 rounded-r-xl">
+    <aside className="w-1/3 px-8 py-16 bg-stone-900 text-stone-50 md:w-72">
       <h2 className="mb-8 font-bold uppercase md:text-xl text-stone-200">Your Projects</h2>
       <div>
         <Button onClick={handleAddClick}>+ Add Project</Button>
@@ -45,6 +46,9 @@ const ProjectsSidebar = () => {
           );
         })}
       </ul>
+      <div>
+        <UserButton />
+      </div>
     </aside>
   );
 };
