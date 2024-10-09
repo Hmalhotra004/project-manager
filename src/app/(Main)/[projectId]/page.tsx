@@ -2,43 +2,44 @@
 import Tasks from "@/components/Tasks";
 import { Projects } from "@prisma/client";
 import axios from "axios";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const SelectedProject = ({ params }: { params: { projectId: string } }) => {
   const [project, setProject] = useState<Projects | null>(null);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const pathname = usePathname();
-  const pathSegments = pathname.split("/");
-  const projectIdFromPath = pathSegments.length > 1 ? pathSegments[1] : null;
 
   useEffect(() => {
-    async function fetchProjects() {
+    async function fetchProject() {
       try {
         const response = await axios.post("/api/projects/details", { projectId: params.projectId });
         setProject(response.data.project);
-        router.refresh();
+        setLoading(false);
       } catch (error) {
-        console.error("Error fetching projects:", error);
+        console.error("Error fetching project:", error);
+        setLoading(false);
       }
     }
 
-    fetchProjects();
-  }, [router, params.projectId]);
+    fetchProject();
+  }, [params.projectId]);
 
-  console.log(projectIdFromPath);
   const handleDelete = async () => {
-    if (!projectIdFromPath) return; // Check if projectId exists
     try {
-      await axios.post("/api/projects/delete", { projectId: projectIdFromPath }); // API call to delete project
+      await axios.post("/api/projects/delete", { projectId: params.projectId });
       router.push("/");
     } catch (error) {
       console.error("Error deleting project:", error);
     }
   };
 
-  if (!project) {
+  if (loading) {
     return <p>Loading project details...</p>;
+  }
+
+  if (!project) {
+    return <p>Project not found.</p>;
   }
 
   return (
