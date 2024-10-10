@@ -1,5 +1,6 @@
-import { RootState } from "@/types";
-import { createSlice } from "@reduxjs/toolkit";
+import { Project, RootState } from "@/types";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 
 const initialState: RootState = {
   currAction: "none",
@@ -7,6 +8,12 @@ const initialState: RootState = {
   projects: [],
   tasks: [],
 };
+
+export const fetchProjects = createAsyncThunk("fetchProjects", async () => {
+  const response = await axios.get("/api/projects/find");
+  const projectData: Project[] = response.data.projects;
+  return projectData;
+});
 
 const projectSlice = createSlice({
   name: "ProjectState",
@@ -21,7 +28,7 @@ const projectSlice = createSlice({
     },
     AddProject(state, action) {
       state.currAction = "none";
-      state.projects = [...state.projects, action.payload];
+      state.projects = [action.payload, ...state.projects];
     },
     SelectProject(state, action) {
       state.currAction = "select";
@@ -45,6 +52,11 @@ const projectSlice = createSlice({
     DeleteTask(state, action) {
       state.tasks = state.tasks.filter(task => task.id !== action.payload);
     },
+  },
+  extraReducers(builder) {
+    builder.addCase(fetchProjects.fulfilled, (state, action) => {
+      state.projects = [...action.payload, ...state.projects];
+    });
   },
 });
 
