@@ -7,14 +7,14 @@ import { RootState } from "@/types";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const Home = () => {
   const currAction = useSelector((state: RootState) => state.currAction);
   const projects = useSelector((state: RootState) => state.projects);
   const selectedProjectId = useSelector((state: RootState) => state.selectedProjectId);
   const router = useRouter();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const checkUser = async () => {
@@ -25,7 +25,6 @@ const Home = () => {
         router.push("/login");
       }
     };
-
     checkUser();
   }, [router]);
 
@@ -37,7 +36,6 @@ const Home = () => {
     content = <NewProject />;
   } else {
     const selectedProject = projects.find(project => project.id === selectedProjectId);
-
     content = selectedProject ? <SelectedProject project={selectedProject} /> : <NoProjectSelected />;
   }
 

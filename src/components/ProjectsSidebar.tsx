@@ -1,15 +1,30 @@
 import { projectActions } from "@/store/projectSlice";
+import { RootState } from "@/types";
 import { UserButton } from "@clerk/nextjs";
+import axios from "axios";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "./Button";
 import { ScrollArea } from "./ui/scroll-area";
-import { RootState } from "@/types";
 
 const ProjectsSidebar = () => {
   const dispatch = useDispatch();
-
   const projects = useSelector((state: RootState) => state.projects);
   const selectedProjectId = useSelector((state: RootState) => state.selectedProjectId);
+
+  useEffect(() => {
+    const getProjects = async () => {
+      try {
+        const response = await axios.get("/api/projects/find");
+        return response.data;
+      } catch (error) {
+        console.error("Failed to fetch user projects:", error);
+      }
+    };
+
+    const projects = getProjects();
+    dispatch(projectActions.AddProject(projects));
+  }, [dispatch]);
 
   function handleSelectClick(id: string) {
     dispatch(projectActions.SelectProject(id));
@@ -26,28 +41,28 @@ const ProjectsSidebar = () => {
         <Button onClick={handleAddClick}>+ Add Project</Button>
       </div>
       <ScrollArea>
-        <ul className="mt-4">
-          {projects.map(project => {
-            let cssClass = "w-full text-left px-2 py-1 rounded-sm my-1 hover:text-stone-200 hover:bg-stone-800 transition-colors";
+        {projects.length === 0 ? (
+          <p className="mt-4 text-stone-400">No projects available.</p>
+        ) : (
+          <ul className="mt-4">
+            {projects.map(project => {
+              const isSelected = project.id === selectedProjectId;
+              const cssClass = `w-full text-left px-2 py-1 rounded-sm my-1 transition-colors ${isSelected ? "text-stone-200 bg-stone-800" : "text-stone-400 hover:text-stone-200 hover:bg-stone-800"}`;
 
-            if (project.id === selectedProjectId) {
-              cssClass += " text-stone-200 bg-stone-800";
-            } else {
-              cssClass += " text-stone-400";
-            }
-
-            return (
-              <li key={project.id}>
-                <button
-                  onClick={() => handleSelectClick(project.id)}
-                  className={cssClass}
-                >
-                  {project.title}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
+              return (
+                <li key={project.id}>
+                  <button
+                    onClick={() => handleSelectClick(project.id)}
+                    className={cssClass}
+                    aria-label={`Select project ${project.title}`}
+                  >
+                    {project.title}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        )}
       </ScrollArea>
       <div className="flex items-center justify-end mt-auto">
         <UserButton />
