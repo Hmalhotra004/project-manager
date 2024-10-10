@@ -28,12 +28,12 @@ const NewProject = () => {
         date: data.date,
       })
     );
-    await axios.post("/api/newproject", {
-      id: data.id,
-      title: data.title,
-      desp: data.desp,
-      date: data.date,
-    });
+    // await axios.post("/api/newproject", {
+    //   id: data.id,
+    //   title: data.title,
+    //   desp: data.desp,
+    //   date: data.date,
+    // });
   }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

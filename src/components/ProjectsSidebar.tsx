@@ -1,7 +1,7 @@
+import { fetchProjectsData } from "@/store/projectActions";
 import { projectActions } from "@/store/projectSlice";
 import { RootState } from "@/types";
 import { UserButton } from "@clerk/nextjs";
-import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "./Button";
@@ -13,18 +13,8 @@ const ProjectsSidebar = () => {
   const selectedProjectId = useSelector((state: RootState) => state.selectedProjectId);
 
   useEffect(() => {
-    const getProjects = async () => {
-      try {
-        const response = await axios.get("/api/projects/find");
-        return response.data;
-      } catch (error) {
-        console.error("Failed to fetch user projects:", error);
-      }
-    };
-
-    const projects = getProjects();
-    dispatch(projectActions.AddProject(projects));
-  }, [dispatch]);
+    dispatch(fetchProjectsData());
+  }, []);
 
   function handleSelectClick(id: string) {
     dispatch(projectActions.SelectProject(id));
