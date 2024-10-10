@@ -1,6 +1,5 @@
 import { projectActions } from "@/store/projectSlice";
 import { Project } from "@/types";
-import axios from "axios";
 import { useRef } from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";

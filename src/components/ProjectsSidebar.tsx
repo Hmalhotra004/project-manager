@@ -1,7 +1,9 @@
-import { fetchProjectsData } from "@/store/projectActions";
+"use client";
 import { projectActions } from "@/store/projectSlice";
 import { RootState } from "@/types";
 import { UserButton } from "@clerk/nextjs";
+import { Projects } from "@prisma/client";
+import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "./Button";
@@ -13,8 +15,22 @@ const ProjectsSidebar = () => {
   const selectedProjectId = useSelector((state: RootState) => state.selectedProjectId);
 
   useEffect(() => {
-    dispatch(fetchProjectsData());
-  }, []);
+    async function getProjects() {
+      const response = await axios.get("/api/projects/find");
+      console.log(response.data.projects);
+      const projectData: Projects[] = response.data.projects;
+      try {
+        projectData.forEach(element => {
+          dispatch(projectActions.AddProject(element));
+        });
+        console.log(projects);
+      } catch (err) {
+        console.error("Failed to fetch projects:", err);
+      }
+    }
+    getProjects();
+    console.log(projects);
+  }, [dispatch]);
 
   function handleSelectClick(id: string) {
     dispatch(projectActions.SelectProject(id));
@@ -30,29 +46,23 @@ const ProjectsSidebar = () => {
       <div>
         <Button onClick={handleAddClick}>+ Add Project</Button>
       </div>
-      <ScrollArea>
-        {projects.length === 0 ? (
-          <p className="mt-4 text-stone-400">No projects available.</p>
-        ) : (
-          <ul className="mt-4">
-            {projects.map(project => {
-              const isSelected = project.id === selectedProjectId;
-              const cssClass = `w-full text-left px-2 py-1 rounded-sm my-1 transition-colors ${isSelected ? "text-stone-200 bg-stone-800" : "text-stone-400 hover:text-stone-200 hover:bg-stone-800"}`;
-
-              return (
-                <li key={project.id}>
-                  <button
-                    onClick={() => handleSelectClick(project.id)}
-                    className={cssClass}
-                    aria-label={`Select project ${project.title}`}
-                  >
-                    {project.title}
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        )}
+      <ScrollArea className="my-4">
+        <ul className="">
+          {projects.map(project => {
+            const isSelected = project.id === selectedProjectId;
+            const cssClass = `w-full text-left px-2 py-1 rounded-sm my-1 transition-colors ${isSelected ? "text-stone-200 bg-stone-800" : "text-stone-400 hover:text-stone-200 hover:bg-stone-800"}`;
+            return (
+              <li key={project.id}>
+                <button
+                  onClick={() => handleSelectClick(project.id)}
+                  className={cssClass}
+                >
+                  {project.title}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
       </ScrollArea>
       <div className="flex items-center justify-end mt-auto">
         <UserButton />

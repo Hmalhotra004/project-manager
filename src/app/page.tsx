@@ -22,7 +22,7 @@ const Home = () => {
         await axios.get("/api/users/check");
       } catch (error) {
         console.error("Failed to fetch user data:", error);
-        router.push("/login");
+        router.push("/");
       }
     };
     checkUser();
