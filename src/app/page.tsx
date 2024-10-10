@@ -4,6 +4,7 @@ import NoProjectSelected from "@/components/NoProjectSelected";
 import ProjectsSidebar from "@/components/ProjectsSidebar";
 import SelectedProject from "@/components/SelectedProject";
 import { RootState } from "@/types";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -13,16 +14,18 @@ const Home = () => {
   const projects = useSelector((state: RootState) => state.projects);
   const selectedProjectId = useSelector((state: RootState) => state.selectedProjectId);
   const router = useRouter();
+  // const dispatch = useDispatch();
 
   useEffect(() => {
     const checkUser = async () => {
-      const response = await fetch("/api/users/check");
-      if (!response.ok) {
-        router.push("/");
-      } else {
-        const data = await response.json();
+      try {
+        await axios.get("/api/users/check");
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
+        router.push("/login");
       }
     };
+
     checkUser();
   }, [router]);
 

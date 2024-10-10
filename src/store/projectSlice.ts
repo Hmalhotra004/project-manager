@@ -1,4 +1,4 @@
-import { Project, RootState, Task } from "@/types";
+import { RootState } from "@/types";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState: RootState = {
