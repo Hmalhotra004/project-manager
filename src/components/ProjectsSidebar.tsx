@@ -4,7 +4,7 @@ import { AppDispatch } from "@/store/store";
 import { RootState } from "@/types";
 import { UserButton } from "@clerk/nextjs";
 import axios from "axios";
-import { Trash, Trash2 } from "lucide-react";
+import { Trash } from "lucide-react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "./Button";
@@ -54,7 +54,7 @@ const ProjectsSidebar = () => {
               >
                 <button
                   onClick={() => handleSelectClick(project.Id)}
-                  // className={cssClass}
+                  className="break-words max-w-full text-left"
                 >
                   {project.name}
                 </button>

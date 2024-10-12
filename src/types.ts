@@ -1,16 +1,10 @@
 import { Projects } from "@prisma/client";
 
 export type Project = {
-  id: string;
-  title: string;
-  desp: string;
-  date: string;
-};
-
-export type ProjectData = {
-  title: string;
-  desp: string;
-  date: string;
+  Id: string;
+  name: string;
+  description: string;
+  dueDate: string;
 };
 
 export type Task = {

@@ -42,9 +42,9 @@ const NewProject = () => {
     dispatch(
       projectActions.AddProject({
         id,
-        title,
-        desp,
-        date,
+        name: title,
+        description: desp,
+        dueDate: date,
       })
     );
   };
