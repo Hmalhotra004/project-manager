@@ -26,6 +26,7 @@ export async function POST() {
         userId: user.id,
         username: `${user.firstName} ${user.lastName}`,
         email: user.emailAddresses[0].emailAddress,
+        password: "asdasdsad",
       },
     });
 
