@@ -1,8 +1,8 @@
 import { projectActions } from "@/store/projectSlice";
+import { Project } from "@/types";
 import axios from "axios";
 import { useRef } from "react";
 import { useDispatch } from "react-redux";
-import { v4 } from "uuid";
 import Input from "./Input";
 import Modal, { ModalHandle } from "./Modal";
 
@@ -30,23 +30,15 @@ const NewProject = () => {
       return;
     }
 
-    const id = v4();
-
-    await axios.post("/api/newproject", {
-      id,
+    const response = await axios.post("/api/projects/new", {
       title,
       desp,
       date,
     });
 
-    dispatch(
-      projectActions.AddProject({
-        id,
-        name: title,
-        description: desp,
-        dueDate: date,
-      })
-    );
+    const project: Project = response.data.project;
+
+    dispatch(projectActions.AddProject(project));
   };
 
   return (

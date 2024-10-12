@@ -1,7 +1,7 @@
 import { Projects } from "@prisma/client";
 
 export type Project = {
-  Id: string;
+  Id: number;
   name: string;
   description: string;
   dueDate: string;
@@ -15,7 +15,7 @@ export type Task = {
 
 export type RootState = {
   currAction: string;
-  selectedProjectId: undefined | string;
+  selectedProjectId: undefined | number;
   projects: Projects[];
   tasks: Task[];
 };

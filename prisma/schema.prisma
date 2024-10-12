@@ -17,7 +17,7 @@ model Users {
 }
 
 model Projects {
-  Id          String  @id @default(uuid())
+  Id          Int     @id @default(autoincrement())
   name        String  @unique
   description String
   dueDate     String
@@ -28,9 +28,9 @@ model Projects {
 }
 
 model Tasks {
-  Id        String   @id @default(uuid())
+  Id        Int      @id @default(autoincrement())
   name      String   @unique
   completed Boolean  @default(false)
   project   Projects @relation(fields: [projectId], references: [Id])
-  projectId String
+  projectId Int
 }

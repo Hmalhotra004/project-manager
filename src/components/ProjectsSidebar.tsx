@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "./Button";
 import { ScrollArea } from "./ui/scroll-area";
+// import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 
 const ProjectsSidebar = () => {
   const projects = useSelector((state: RootState) => state.projects);
@@ -19,7 +20,7 @@ const ProjectsSidebar = () => {
     dispatch(fetchProjects());
   }, [dispatch]);
 
-  function handleSelectClick(id: string) {
+  function handleSelectClick(id: number) {
     dispatch(projectActions.SelectProject(id));
   }
 
@@ -27,7 +28,7 @@ const ProjectsSidebar = () => {
     dispatch(projectActions.StartAddProject());
   }
 
-  async function handleDelete(id: string) {
+  async function handleDelete(id: number) {
     try {
       await axios.post("/api/projects/delete", { id });
       dispatch(projectActions.DeleteProject(id));
@@ -35,6 +36,18 @@ const ProjectsSidebar = () => {
       console.error("Failed to delete project:", error);
     }
   }
+
+  const sortedProjects = projects.slice().sort((a, b) => {
+    if (a.completed !== b.completed) {
+      return a.completed ? 1 : -1;
+    }
+
+    if (!a.completed && !b.completed) {
+      return b.Id - a.Id;
+    }
+
+    return a.name.localeCompare(b.name);
+  });
 
   return (
     <aside className="w-1/3 px-6 pt-8 pb-4 bg-stone-900 text-stone-50 md:w-72 h-screen flex flex-col">
@@ -44,7 +57,7 @@ const ProjectsSidebar = () => {
       </div>
       <ScrollArea className="my-4">
         <ul>
-          {projects.map(project => {
+          {sortedProjects.map(project => {
             const isSelected = project.Id === selectedProjectId;
             const cssClass = `w-full text-left px-2 py-1 rounded-sm my-1 transition-colors ${isSelected ? "text-stone-200 bg-stone-800" : "text-stone-400 hover:text-stone-200 hover:bg-stone-800"}`;
             return (
@@ -63,6 +76,14 @@ const ProjectsSidebar = () => {
                   onClick={() => handleDelete(project.Id)}
                 >
                   <Trash className="w-5" />
+                  {/* <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <Trash className="w-5" />
+                      </TooltipTrigger>
+                      <TooltipContent>Delete</TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider> */}
                 </button>
               </li>
             );

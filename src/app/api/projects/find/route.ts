@@ -19,7 +19,7 @@ export async function GET() {
           completed: "asc",
         },
         {
-          name: "asc",
+          Id: "desc",
         },
       ],
     });
