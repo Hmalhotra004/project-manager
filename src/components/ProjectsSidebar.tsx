@@ -20,7 +20,7 @@ const ProjectsSidebar = () => {
     dispatch(fetchProjects());
   }, [dispatch]);
 
-  function handleSelectClick(id: number) {
+  function handleSelectClick(id: string) {
     dispatch(projectActions.SelectProject(id));
   }
 
@@ -28,7 +28,7 @@ const ProjectsSidebar = () => {
     dispatch(projectActions.StartAddProject());
   }
 
-  async function handleDelete(id: number) {
+  async function handleDelete(id: string) {
     try {
       await axios.post("/api/projects/delete", { id });
       dispatch(projectActions.DeleteProject(id));
@@ -40,10 +40,6 @@ const ProjectsSidebar = () => {
   const sortedProjects = projects.slice().sort((a, b) => {
     if (a.completed !== b.completed) {
       return a.completed ? 1 : -1;
-    }
-
-    if (!a.completed && !b.completed) {
-      return b.Id - a.Id;
     }
 
     return a.name.localeCompare(b.name);

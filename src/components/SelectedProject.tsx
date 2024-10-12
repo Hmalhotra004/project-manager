@@ -35,7 +35,7 @@ const SelectedProject = ({ project }: Props) => {
   async function handleState() {
     const state = !project.completed;
     await axios.put("/api/projects/state", { projectId: project.Id, state });
-    dispatch(projectActions.ProjectState({ id: project.Id, Pstate: state }));
+    dispatch(projectActions.UpdateState({ id: project.Id, Pstate: state }));
   }
 
   function handleEditToggle() {
@@ -54,7 +54,7 @@ const SelectedProject = ({ project }: Props) => {
     }
 
     await axios.put("/api/projects/desp", { description, projectId: project.Id });
-    dispatch(projectActions.UpdateProject({ id: project.Id, description }));
+    dispatch(projectActions.UpdateDesp({ id: project.Id, description }));
     setIsEditing(false);
   }
 

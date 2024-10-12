@@ -9,7 +9,7 @@ const Tasks = () => {
   const selectedProjectId = useSelector((state: RootState) => state.selectedProjectId);
   const dispatch = useDispatch();
 
-  async function deleteTask(Id: number) {
+  async function deleteTask(Id: string) {
     await axios.post("/api/tasks/delete", { Id, projectId: selectedProjectId });
     dispatch(projectActions.DeleteTask(Id));
   }

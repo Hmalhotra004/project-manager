@@ -16,7 +16,7 @@ export const fetchProjects = createAsyncThunk("fetchProjects", async () => {
   return projectData;
 });
 
-export const fetchTasks = createAsyncThunk("fetchTasks", async (projectId: number) => {
+export const fetchTasks = createAsyncThunk("fetchTasks", async (projectId: string) => {
   const response = await axios.post("/api/tasks/find", { projectId });
   const taskData: Task[] = response.data.tasks;
   return taskData;
@@ -54,14 +54,14 @@ const projectSlice = createSlice({
       }
       state.currAction = "none";
     },
-    UpdateProject(state, action) {
+    UpdateDesp(state, action) {
       const { id, description } = action.payload;
       const projectToUpdate = state.projects.find(project => project.Id === id);
       if (projectToUpdate) {
         projectToUpdate.description = description;
       }
     },
-    ProjectState(state, action) {
+    UpdateState(state, action) {
       const { id, Pstate } = action.payload;
       const projectToUpdate = state.projects.find(project => project.Id === id);
       if (projectToUpdate) {
