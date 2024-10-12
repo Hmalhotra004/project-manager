@@ -8,7 +8,7 @@ const Tasks = () => {
   const selectedProjectId = useSelector((state: RootState) => state.selectedProjectId);
   const dispatch = useDispatch();
 
-  function deleteTask(id: string) {
+  function deleteTask(id: number) {
     dispatch(projectActions.DeleteTask(id));
   }
 
@@ -27,7 +27,7 @@ const Tasks = () => {
                 key={task.id}
                 className="flex justify-between my-4"
               >
-                <span>{task.text}</span>
+                <span>{task.name}</span>
                 <button
                   onClick={() => deleteTask(task.id)}
                   className="text-stone-700 hover:text-red-500 transition-colors"

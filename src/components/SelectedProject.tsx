@@ -1,7 +1,7 @@
 import { projectActions } from "@/store/projectSlice";
 import { Projects } from "@prisma/client";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import Tasks from "./Tasks";
 import { ScrollArea } from "./ui/scroll-area";
@@ -15,6 +15,11 @@ const SelectedProject = ({ project }: Props) => {
 
   const [isEditing, setIsEditing] = useState(false);
   const [description, setDescription] = useState(project.description);
+
+  useEffect(() => {
+    setDescription(project.description);
+    setIsEditing(false);
+  }, [project.description]);
 
   const formattedDate = new Date(project.dueDate).toLocaleDateString("en-US", {
     year: "numeric",
@@ -86,7 +91,7 @@ const SelectedProject = ({ project }: Props) => {
 
           <button
             onClick={handleEditToggle}
-            className="text-blue-500 mt-2"
+            className="text-blue-500 mt-1"
           >
             {!isEditing && "Edit Description"}
           </button>

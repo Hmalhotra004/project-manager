@@ -8,9 +8,9 @@ export type Project = {
 };
 
 export type Task = {
-  id: string;
-  text: string;
-  projectId: string;
+  id: number;
+  name: string;
+  projectId: number;
 };
 
 export type RootState = {
