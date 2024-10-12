@@ -1,6 +1,6 @@
 import db from "@/lib/db";
-import { RedirectToSignIn } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 import { NextResponse } from "next/server";
 
 export async function POST() {
@@ -8,7 +8,7 @@ export async function POST() {
     const user = await currentUser();
 
     if (!user) {
-      return RedirectToSignIn;
+      return redirect("/");
     }
 
     const profile = await db.users.findUnique({
@@ -26,7 +26,6 @@ export async function POST() {
         userId: user.id,
         username: `${user.firstName} ${user.lastName}`,
         email: user.emailAddresses[0].emailAddress,
-        password: "asdasdsad",
       },
     });
 
