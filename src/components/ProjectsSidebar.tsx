@@ -8,7 +8,6 @@ import { Trash } from "lucide-react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "./Button";
-import { ScrollArea } from "./ui/scroll-area";
 // import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 
 const ProjectsSidebar = () => {
@@ -51,41 +50,31 @@ const ProjectsSidebar = () => {
       <div>
         <Button onClick={handleAddClick}>+ Add Project</Button>
       </div>
-      <ScrollArea className="my-4">
-        <ul>
-          {sortedProjects.map(project => {
-            const isSelected = project.Id === selectedProjectId;
-            const cssClass = `w-full text-left px-2 py-1 rounded-sm my-1 transition-colors ${isSelected ? "text-stone-200 bg-stone-800" : "text-stone-400 hover:text-stone-200 hover:bg-stone-800"}`;
-            return (
-              <li
-                key={project.Id}
-                className={`flex ${cssClass}`}
+      <ul className="my-4 overflow-y-auto scroll-area">
+        {sortedProjects.map(project => {
+          const isSelected = project.Id === selectedProjectId;
+          const cssClass = `w-full text-left px-2 py-1 rounded-sm my-1 transition-colors ${isSelected ? "text-stone-200 bg-stone-800" : "text-stone-400 hover:text-stone-200 hover:bg-stone-800"}`;
+          return (
+            <li
+              key={project.Id}
+              className={`flex ${cssClass}`}
+            >
+              <button
+                onClick={() => handleSelectClick(project.Id)}
+                className="break-words max-w-full text-left"
               >
-                <button
-                  onClick={() => handleSelectClick(project.Id)}
-                  className="break-words max-w-full text-left"
-                >
-                  {project.completed ? <del>{project.name}</del> : <span>{project.name}</span>}
-                </button>
-                <button
-                  className="ml-auto hover:text-rose-700"
-                  onClick={() => handleDelete(project.Id)}
-                >
-                  <Trash className="w-5" />
-                  {/* <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger>
-                        <Trash className="w-5" />
-                      </TooltipTrigger>
-                      <TooltipContent>Delete</TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider> */}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      </ScrollArea>
+                {project.completed ? <del>{project.name}</del> : <span>{project.name}</span>}
+              </button>
+              <button
+                className="ml-auto hover:text-rose-700"
+                onClick={() => handleDelete(project.Id)}
+              >
+                <Trash className="w-5" />
+              </button>
+            </li>
+          );
+        })}
+      </ul>
       <div className="flex items-center justify-end mt-auto">
         <UserButton />
       </div>

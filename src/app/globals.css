@@ -72,4 +72,22 @@
     @apply bg-background text-foreground;
   }
 
+  .scroll-area {
+    overflow: auto; /* Enables scrolling */
+  }
+
+  /* Hide scrollbar for WebKit browsers (Chrome, Safari) */
+  .scroll-area::-webkit-scrollbar {
+    display: none; /* Hides scrollbar */
+  }
+
+  /* Hide scrollbar for Firefox */
+  .scroll-area {
+    scrollbar-width: none; /* Firefox */
+  }
+
+  /* For IE and Edge */
+  .scroll-area {
+    -ms-overflow-style: none; /* IE and Edge */
+  }
 }
