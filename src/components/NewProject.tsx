@@ -2,6 +2,7 @@ import { projectActions } from "@/store/projectSlice";
 import axios from "axios";
 import { useRef } from "react";
 import { useDispatch } from "react-redux";
+import { v4 } from "uuid";
 import Input from "./Input";
 import Modal, { ModalHandle } from "./Modal";
 
@@ -29,13 +30,23 @@ const NewProject = () => {
       return;
     }
 
+    const id = v4();
+
     await axios.post("/api/newproject", {
+      id,
       title,
       desp,
       date,
     });
 
-    dispatch(projectActions.AddProject());
+    dispatch(
+      projectActions.AddProject({
+        id,
+        title,
+        desp,
+        date,
+      })
+    );
   };
 
   return (

@@ -1,31 +1,22 @@
 "use client";
-import { projectActions } from "@/store/projectSlice";
+import { fetchProjects, projectActions } from "@/store/projectSlice";
+import { AppDispatch } from "@/store/store";
 import { RootState } from "@/types";
 import { UserButton } from "@clerk/nextjs";
-import { Projects } from "@prisma/client";
 import axios from "axios";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Trash, Trash2 } from "lucide-react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "./Button";
 import { ScrollArea } from "./ui/scroll-area";
 
 const ProjectsSidebar = () => {
-  const [projects, setProjects] = useState<Projects[]>([]);
-
-  const dispatch = useDispatch();
-  const router = useRouter();
-  // const projects = useSelector((state: RootState) => state.projects);
+  const projects = useSelector((state: RootState) => state.projects);
   const selectedProjectId = useSelector((state: RootState) => state.selectedProjectId);
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    async function getProjects() {
-      const response = await axios.get("/api/projects/find");
-      const projectData = response.data.projects;
-      setProjects(projectData);
-      router.refresh();
-    }
-    getProjects();
+    dispatch(fetchProjects());
   }, [dispatch]);
 
   function handleSelectClick(id: string) {
@@ -34,6 +25,15 @@ const ProjectsSidebar = () => {
 
   function handleAddClick() {
     dispatch(projectActions.StartAddProject());
+  }
+
+  async function handleDelete(id: string) {
+    try {
+      await axios.post("/api/projects/delete", { id });
+      dispatch(projectActions.DeleteProject(id));
+    } catch (error) {
+      console.error("Failed to delete project:", error);
+    }
   }
 
   return (
@@ -48,12 +48,21 @@ const ProjectsSidebar = () => {
             const isSelected = project.Id === selectedProjectId;
             const cssClass = `w-full text-left px-2 py-1 rounded-sm my-1 transition-colors ${isSelected ? "text-stone-200 bg-stone-800" : "text-stone-400 hover:text-stone-200 hover:bg-stone-800"}`;
             return (
-              <li key={project.Id}>
+              <li
+                key={project.Id}
+                className={`flex ${cssClass}`}
+              >
                 <button
                   onClick={() => handleSelectClick(project.Id)}
-                  className={cssClass}
+                  // className={cssClass}
                 >
                   {project.name}
+                </button>
+                <button
+                  className="ml-auto hover:text-rose-700"
+                  onClick={() => handleDelete(project.Id)}
+                >
+                  <Trash className="w-5" />
                 </button>
               </li>
             );

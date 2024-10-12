@@ -3,7 +3,6 @@ import NewProject from "@/components/NewProject";
 import NoProjectSelected from "@/components/NoProjectSelected";
 import ProjectsSidebar from "@/components/ProjectsSidebar";
 import SelectedProject from "@/components/SelectedProject";
-import { fetchProjects } from "@/store/projectSlice";
 import { AppDispatch } from "@/store/store";
 import { RootState } from "@/types";
 import axios from "axios";
@@ -37,7 +36,7 @@ const Home = () => {
   } else if (currAction === "add") {
     content = <NewProject />;
   } else {
-    const selectedProject = projects.find(project => project.id === selectedProjectId);
+    const selectedProject = projects.find(project => project.Id === selectedProjectId);
     content = selectedProject ? <SelectedProject project={selectedProject} /> : <NoProjectSelected />;
   }
 

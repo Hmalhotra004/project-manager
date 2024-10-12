@@ -1,4 +1,5 @@
-import { Project, RootState } from "@/types";
+import { RootState } from "@/types";
+import { Projects } from "@prisma/client";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -11,7 +12,7 @@ const initialState: RootState = {
 
 export const fetchProjects = createAsyncThunk("fetchProjects", async () => {
   const response = await axios.get("/api/projects/find");
-  const projectData: Project[] = response.data.projects;
+  const projectData: Projects[] = response.data.projects;
   return projectData;
 });
 
@@ -26,9 +27,9 @@ const projectSlice = createSlice({
     CancelAddProject(state) {
       state.currAction = "none";
     },
-    AddProject(state) {
+    AddProject(state, action) {
       state.currAction = "none";
-      // state.projects = [action.payload, ...state.projects];
+      state.projects = [action.payload, ...state.projects];
     },
     SelectProject(state, action) {
       state.currAction = "select";
@@ -39,9 +40,10 @@ const projectSlice = createSlice({
         state.selectedProjectId = action.payload;
       }
     },
-    DeleteProject(state) {
+    DeleteProject(state, action) {
+      state.selectedProjectId = action.payload;
       if (state.selectedProjectId !== undefined) {
-        state.projects = state.projects.filter(project => project.id !== state.selectedProjectId);
+        state.projects = state.projects.filter(project => project.Id !== state.selectedProjectId);
         state.selectedProjectId = undefined;
       }
       state.currAction = "none";
@@ -55,7 +57,7 @@ const projectSlice = createSlice({
   },
   extraReducers(builder) {
     builder.addCase(fetchProjects.fulfilled, (state, action) => {
-      state.projects = [...action.payload, ...state.projects];
+      state.projects = [...action.payload];
     });
   },
 });

@@ -1,3 +1,5 @@
+import { Projects } from "@prisma/client";
+
 export type Project = {
   id: string;
   title: string;
@@ -20,6 +22,6 @@ export type Task = {
 export type RootState = {
   currAction: string;
   selectedProjectId: undefined | string;
-  projects: Project[];
+  projects: Projects[];
   tasks: Task[];
 };
