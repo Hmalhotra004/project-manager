@@ -35,7 +35,7 @@ const Tasks = () => {
       } finally {
         setTimeout(() => {
           setLoading(false);
-        }, 1000);
+        }, 1000); // Adjust the delay as needed
       }
     }
     getTasks();
@@ -45,12 +45,13 @@ const Tasks = () => {
     <section className="mb-12">
       <h2 className="text-2xl font-bold text-stone-700 mb-4">Tasks</h2>
       <NewTask />
-      {loading ? (
-        <p className="text-black text-base my-4">Loading Tasks</p>
+      {selectedProjectTasks.length === 0 ? (
+        <p className="text-stone-800 my-4">This project does not have any tasks yet.</p>
       ) : (
         <>
-          {selectedProjectTasks.length === 0 && <p className="text-stone-800 my-4">This project does not have any task yet.</p>}
-          {selectedProjectTasks.length > 0 && (
+          {loading ? (
+            <p className="text-black text-base my-4">Loading Tasks...</p>
+          ) : (
             <ul className="px-4 py-2 mt-8 rounded-md bg-stone-100">
               {selectedProjectTasks.map(task => {
                 return (

@@ -1,23 +1,17 @@
 "use client";
-import { fetchProjects, projectActions } from "@/store/projectSlice";
+import { projectActions } from "@/store/projectSlice";
 import { AppDispatch } from "@/store/store";
 import { RootState } from "@/types";
 import { UserButton } from "@clerk/nextjs";
 import axios from "axios";
 import { Trash } from "lucide-react";
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "./Button";
-// import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 
 const ProjectsSidebar = () => {
   const projects = useSelector((state: RootState) => state.projects);
   const selectedProjectId = useSelector((state: RootState) => state.selectedProjectId);
   const dispatch = useDispatch<AppDispatch>();
-
-  useEffect(() => {
-    dispatch(fetchProjects());
-  }, [dispatch]);
 
   function handleSelectClick(id: string) {
     dispatch(projectActions.SelectProject(id));

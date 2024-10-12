@@ -3,14 +3,16 @@ import NewProject from "@/components/NewProject";
 import NoProjectSelected from "@/components/NoProjectSelected";
 import ProjectsSidebar from "@/components/ProjectsSidebar";
 import SelectedProject from "@/components/SelectedProject";
+import { fetchProjects } from "@/store/projectSlice";
 import { AppDispatch } from "@/store/store";
 import { RootState } from "@/types";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const Home = () => {
+  const [user, setUser] = useState(false);
   const currAction = useSelector((state: RootState) => state.currAction);
   const projects = useSelector((state: RootState) => state.projects);
   const selectedProjectId = useSelector((state: RootState) => state.selectedProjectId);
@@ -21,6 +23,7 @@ const Home = () => {
     const checkUser = async () => {
       try {
         await axios.get("/api/users/check");
+        setUser(true);
       } catch (error) {
         console.error("Failed to fetch user data:", error);
         router.push("/");
@@ -28,6 +31,12 @@ const Home = () => {
     };
     checkUser();
   }, [router]);
+
+  useEffect(() => {
+    if (user) {
+      dispatch(fetchProjects());
+    }
+  }, [dispatch, user]);
 
   let content;
 
