@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
 
     const project = await db.projects.findUnique({
       where: {
-        projectId,
+        Id: projectId,
         userId: profile.userId,
       },
     });
