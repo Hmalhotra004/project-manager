@@ -22,7 +22,7 @@ const Home = () => {
   useEffect(() => {
     const checkUser = async () => {
       try {
-        await axios.get("/api/users/check");
+        await axios.post("/api/users/check");
         setUser(true);
       } catch (error) {
         console.error("Failed to fetch user data:", error);
