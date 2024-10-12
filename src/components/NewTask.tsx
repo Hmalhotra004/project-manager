@@ -1,33 +1,37 @@
 import { projectActions } from "@/store/projectSlice";
-import { ChangeEvent, useState } from "react";
+import { RootState } from "@/types";
+import { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const NewTask = () => {
-  const [enteredTask, setEnteredTask] = useState<string>("");
-
-  const selectedProjectId: undefined | number = useSelector((state: { selectedProjectId: undefined | number }) => state.selectedProjectId);
+  const enteredTaskRef = useRef<HTMLInputElement>(null);
+  const selectedProjectId = useSelector((state: RootState) => state.selectedProjectId);
   const dispatch = useDispatch();
 
-  function addTask() {
-    if (enteredTask.trim() === "") {
+  async function addTask() {
+    if (!enteredTaskRef.current) {
       return;
     }
-    const id = Math.random();
-    dispatch(projectActions.AddTask({ id: id, text: enteredTask, projectId: selectedProjectId }));
-    setEnteredTask("");
-  }
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setEnteredTask(e.target.value);
-  };
+    const taskText = enteredTaskRef.current.value;
+
+    if (!taskText.trim()) {
+      return;
+    }
+
+    const id = Math.random();
+
+    dispatch(projectActions.AddTask({ id, text: taskText, projectId: selectedProjectId }));
+
+    enteredTaskRef.current.value = "";
+  }
 
   return (
     <div className="flex items-center gap-4">
       <input
         type="text"
+        ref={enteredTaskRef}
         className="w-64 px-2 py-1 rounded-sm bg-stone-200"
-        onChange={handleChange}
-        value={enteredTask}
       />
       <button
         onClick={addTask}

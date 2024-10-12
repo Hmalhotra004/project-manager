@@ -42,6 +42,12 @@ const SelectedProject = ({ project }: Props) => {
   }
 
   async function handleDespSave() {
+    if (!description.trim()) {
+      setDescription(project.description);
+      setIsEditing(false);
+      return;
+    }
+
     await axios.put("/api/projects/desp", { description, projectId: project.Id });
     dispatch(projectActions.UpdateProject({ id: project.Id, description }));
     setIsEditing(false);
