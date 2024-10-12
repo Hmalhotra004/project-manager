@@ -1,4 +1,5 @@
-import { projectActions } from "@/store/projectSlice";
+import { fetchTasks, projectActions } from "@/store/projectSlice";
+import { AppDispatch } from "@/store/store";
 import { Projects } from "@prisma/client";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -11,10 +12,14 @@ interface Props {
 }
 
 const SelectedProject = ({ project }: Props) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const [isEditing, setIsEditing] = useState(false);
   const [description, setDescription] = useState(project.description);
+
+  useEffect(() => {
+    dispatch(fetchTasks(project.Id));
+  }, [dispatch, project.Id]);
 
   useEffect(() => {
     setDescription(project.description);
@@ -55,7 +60,7 @@ const SelectedProject = ({ project }: Props) => {
 
   return (
     <ScrollArea>
-      <div className="w-[45rem] mt-16 ">
+      <div className="w-[45rem] mt-16 mr-12">
         <header className="pb-4 mb-4 border-b-2 border-stone-300">
           <div className="flex items-center justify-between">
             <h1 className="text-3xl font-bold text-stone-600 mb-2">{project.name}</h1>

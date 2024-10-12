@@ -1,4 +1,4 @@
-import { RootState } from "@/types";
+import { RootState, Task } from "@/types";
 import { Projects } from "@prisma/client";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
@@ -14,6 +14,12 @@ export const fetchProjects = createAsyncThunk("fetchProjects", async () => {
   const response = await axios.get("/api/projects/find");
   const projectData: Projects[] = response.data.projects;
   return projectData;
+});
+
+export const fetchTasks = createAsyncThunk("fetchTasks", async (projectId: number) => {
+  const response = await axios.post("/api/tasks/find", { projectId });
+  const taskData: Task[] = response.data.tasks;
+  return taskData;
 });
 
 const projectSlice = createSlice({
@@ -66,12 +72,15 @@ const projectSlice = createSlice({
       state.tasks = [action.payload, ...state.tasks];
     },
     DeleteTask(state, action) {
-      state.tasks = state.tasks.filter(task => task.id !== action.payload);
+      state.tasks = state.tasks.filter(task => task.Id !== action.payload);
     },
   },
   extraReducers(builder) {
     builder.addCase(fetchProjects.fulfilled, (state, action) => {
       state.projects = [...action.payload];
+    });
+    builder.addCase(fetchTasks.fulfilled, (state, action) => {
+      state.tasks = [...action.payload];
     });
   },
 });

@@ -1,5 +1,6 @@
 import { projectActions } from "@/store/projectSlice";
 import { RootState } from "@/types";
+import axios from "axios";
 import { useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -13,15 +14,14 @@ const NewTask = () => {
       return;
     }
 
-    const taskText = enteredTaskRef.current.value;
+    const name = enteredTaskRef.current.value;
 
-    if (!taskText.trim()) {
+    if (!name.trim()) {
       return;
     }
 
-    const id = Math.random();
-
-    dispatch(projectActions.AddTask({ id, text: taskText, projectId: selectedProjectId }));
+    const response = await axios.post("/api/tasks/new", { name, projectId: selectedProjectId });
+    dispatch(projectActions.AddTask(response.data.task));
 
     enteredTaskRef.current.value = "";
   }
