@@ -4,32 +4,28 @@ import { RootState } from "@/types";
 import { UserButton } from "@clerk/nextjs";
 import { Projects } from "@prisma/client";
 import axios from "axios";
-import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "./Button";
 import { ScrollArea } from "./ui/scroll-area";
 
 const ProjectsSidebar = () => {
+  const [projects, setProjects] = useState<Projects[]>([]);
+
   const dispatch = useDispatch();
-  const projects = useSelector((state: RootState) => state.projects);
+  const router = useRouter();
+  // const projects = useSelector((state: RootState) => state.projects);
   const selectedProjectId = useSelector((state: RootState) => state.selectedProjectId);
 
   useEffect(() => {
     async function getProjects() {
       const response = await axios.get("/api/projects/find");
-      console.log(response.data.projects);
-      const projectData: Projects[] = response.data.projects;
-      try {
-        projectData.forEach(element => {
-          dispatch(projectActions.AddProject(element));
-        });
-        console.log(projects);
-      } catch (err) {
-        console.error("Failed to fetch projects:", err);
-      }
+      const projectData = response.data.projects;
+      setProjects(projectData);
+      router.refresh();
     }
     getProjects();
-    console.log(projects);
   }, [dispatch]);
 
   function handleSelectClick(id: string) {
@@ -47,17 +43,17 @@ const ProjectsSidebar = () => {
         <Button onClick={handleAddClick}>+ Add Project</Button>
       </div>
       <ScrollArea className="my-4">
-        <ul className="">
+        <ul>
           {projects.map(project => {
-            const isSelected = project.id === selectedProjectId;
+            const isSelected = project.Id === selectedProjectId;
             const cssClass = `w-full text-left px-2 py-1 rounded-sm my-1 transition-colors ${isSelected ? "text-stone-200 bg-stone-800" : "text-stone-400 hover:text-stone-200 hover:bg-stone-800"}`;
             return (
-              <li key={project.id}>
+              <li key={project.Id}>
                 <button
-                  onClick={() => handleSelectClick(project.id)}
+                  onClick={() => handleSelectClick(project.Id)}
                   className={cssClass}
                 >
-                  {project.title}
+                  {project.name}
                 </button>
               </li>
             );

@@ -3,6 +3,8 @@ import NewProject from "@/components/NewProject";
 import NoProjectSelected from "@/components/NoProjectSelected";
 import ProjectsSidebar from "@/components/ProjectsSidebar";
 import SelectedProject from "@/components/SelectedProject";
+import { fetchProjects } from "@/store/projectSlice";
+import { AppDispatch } from "@/store/store";
 import { RootState } from "@/types";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -14,7 +16,7 @@ const Home = () => {
   const projects = useSelector((state: RootState) => state.projects);
   const selectedProjectId = useSelector((state: RootState) => state.selectedProjectId);
   const router = useRouter();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     const checkUser = async () => {

@@ -1,8 +1,7 @@
 import { projectActions } from "@/store/projectSlice";
-import { Project } from "@/types";
+import axios from "axios";
 import { useRef } from "react";
 import { useDispatch } from "react-redux";
-import { v4 as uuidv4 } from "uuid";
 import Input from "./Input";
 import Modal, { ModalHandle } from "./Modal";
 
@@ -18,24 +17,7 @@ const NewProject = () => {
     dispatch(projectActions.CancelAddProject());
   }
 
-  async function handleAddProject(data: Project) {
-    dispatch(
-      projectActions.AddProject({
-        id: data.id,
-        title: data.title,
-        desp: data.desp,
-        date: data.date,
-      })
-    );
-    // await axios.post("/api/newproject", {
-    //   id: data.id,
-    //   title: data.title,
-    //   desp: data.desp,
-    //   date: data.date,
-    // });
-  }
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const title = titleRef.current?.value;
@@ -47,14 +29,13 @@ const NewProject = () => {
       return;
     }
 
-    const id = uuidv4();
-
-    handleAddProject({
-      id,
+    await axios.post("/api/newproject", {
       title,
       desp,
-      date: date,
+      date,
     });
+
+    dispatch(projectActions.AddProject());
   };
 
   return (

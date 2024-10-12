@@ -26,9 +26,9 @@ const projectSlice = createSlice({
     CancelAddProject(state) {
       state.currAction = "none";
     },
-    AddProject(state, action) {
+    AddProject(state) {
       state.currAction = "none";
-      state.projects = [action.payload, ...state.projects];
+      // state.projects = [action.payload, ...state.projects];
     },
     SelectProject(state, action) {
       state.currAction = "select";
