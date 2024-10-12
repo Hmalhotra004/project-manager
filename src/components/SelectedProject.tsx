@@ -22,8 +22,10 @@ const SelectedProject = ({ project }: Props) => {
     day: "numeric",
   });
 
-  function handleDelete() {
-    dispatch(projectActions.DeleteProject(project.Id));
+  async function handleState() {
+    const state = !project.completed;
+    await axios.put("/api/projects/state", { projectId: project.Id, state });
+    dispatch(projectActions.ProjectState({ id: project.Id, Pstate: state }));
   }
 
   function handleEditToggle() {
@@ -35,7 +37,7 @@ const SelectedProject = ({ project }: Props) => {
   }
 
   async function handleDespSave() {
-    await axios.post("/api/projects/desp", { description, projectId: project.Id });
+    await axios.put("/api/projects/desp", { description, projectId: project.Id });
     dispatch(projectActions.UpdateProject({ id: project.Id, description }));
     setIsEditing(false);
   }
@@ -47,10 +49,10 @@ const SelectedProject = ({ project }: Props) => {
           <div className="flex items-center justify-between">
             <h1 className="text-3xl font-bold text-stone-600 mb-2">{project.name}</h1>
             <button
-              onClick={handleDelete}
+              onClick={handleState}
               className="text-black hover:text-emerald-700 transition-colors"
             >
-              Mark as Completed
+              {project.completed ? "Mark as Notcompleted" : "Mark as Completed"}
             </button>
           </div>
           <p className="mb-4 text-stone-400">{formattedDate}</p>

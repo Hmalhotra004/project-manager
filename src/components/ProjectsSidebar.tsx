@@ -56,7 +56,7 @@ const ProjectsSidebar = () => {
                   onClick={() => handleSelectClick(project.Id)}
                   className="break-words max-w-full text-left"
                 >
-                  {project.name}
+                  {project.completed ? <del>{project.name}</del> : <span>{project.name}</span>}
                 </button>
                 <button
                   className="ml-auto hover:text-rose-700"

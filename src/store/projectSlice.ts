@@ -55,6 +55,13 @@ const projectSlice = createSlice({
         projectToUpdate.description = description;
       }
     },
+    ProjectState(state, action) {
+      const { id, Pstate } = action.payload;
+      const projectToUpdate = state.projects.find(project => project.Id === id);
+      if (projectToUpdate) {
+        projectToUpdate.completed = Pstate;
+      }
+    },
     AddTask(state, action) {
       state.tasks = [action.payload, ...state.tasks];
     },

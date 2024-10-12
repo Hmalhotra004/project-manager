@@ -2,7 +2,7 @@ import currentProfile from "@/lib/currentProfile";
 import db from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: NextRequest) {
+export async function PUT(req: NextRequest) {
   try {
     const profile = await currentProfile();
 

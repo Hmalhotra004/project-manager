@@ -14,6 +14,14 @@ export async function GET() {
       where: {
         userId: profile.userId,
       },
+      orderBy: [
+        {
+          completed: "asc",
+        },
+        {
+          name: "asc",
+        },
+      ],
     });
 
     return NextResponse.json({ message: "Projects Found", projects });
