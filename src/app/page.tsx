@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 const Home = () => {
   const [user, setUser] = useState(false);
+  const [loading, setLoading] = useState(true);
   const currAction = useSelector((state: RootState) => state.currAction);
   const projects = useSelector((state: RootState) => state.projects);
   const selectedProjectId = useSelector((state: RootState) => state.selectedProjectId);
@@ -27,6 +28,7 @@ const Home = () => {
       } catch (error) {
         console.error("Failed to fetch user data:", error);
         router.push("/");
+        setLoading(false);
       }
     };
     checkUser();
@@ -34,7 +36,8 @@ const Home = () => {
 
   useEffect(() => {
     if (user) {
-      dispatch(fetchProjects());
+      setLoading(true);
+      dispatch(fetchProjects()).finally(() => setLoading(false));
     }
   }, [dispatch, user]);
 
@@ -47,6 +50,14 @@ const Home = () => {
   } else {
     const selectedProject = projects.find(project => project.Id === selectedProjectId);
     content = selectedProject ? <SelectedProject project={selectedProject} /> : <NoProjectSelected />;
+  }
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-stone-400">
+        <div className="pageloader"></div>
+      </div>
+    );
   }
 
   return (

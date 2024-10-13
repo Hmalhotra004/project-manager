@@ -3,11 +3,12 @@ import { fetchTasks, projectActions } from "@/store/projectSlice";
 import { AppDispatch } from "@/store/store";
 import { RootState } from "@/types";
 import axios from "axios";
-import { Check, Trash, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Check, LucideProps, Trash, X } from "lucide-react";
+import { ForwardRefExoticComponent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import NewTask from "./NewTask";
 import { Separator } from "./ui/separator";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 
 const Tasks = () => {
   const [delLoading, setDelLoading] = useState(false);
@@ -93,7 +94,10 @@ const Tasks = () => {
                             onClick={() => taskState(task.Id, task.completed, task.projectId)}
                             disabled={delLoading}
                           >
-                            <Check className="w-5" />
+                            <IconButton
+                              text="Mark as Completed"
+                              icon={Check}
+                            />
                           </button>
 
                           <Separator
@@ -106,7 +110,10 @@ const Tasks = () => {
                             className="text-stone-700 hover:text-red-500 transition-colors"
                             disabled={delLoading}
                           >
-                            <Trash className="w-5" />
+                            <IconButton
+                              text="Detele Task"
+                              icon={Trash}
+                            />
                           </button>
                         </div>
                       </li>
@@ -131,7 +138,10 @@ const Tasks = () => {
                             onClick={() => taskState(task.Id, task.completed, task.projectId)}
                             disabled={delLoading}
                           >
-                            <X className="w-5" />
+                            <IconButton
+                              text="Mark as Not Completed"
+                              icon={X}
+                            />
                           </button>
 
                           <Separator
@@ -144,7 +154,10 @@ const Tasks = () => {
                             className="text-stone-700 hover:text-red-500 transition-colors"
                             disabled={delLoading}
                           >
-                            <Trash className="w-5" />
+                            <IconButton
+                              text="Detele Task"
+                              icon={Trash}
+                            />
                           </button>
                         </div>
                       </li>
@@ -157,6 +170,21 @@ const Tasks = () => {
         </>
       )}
     </section>
+  );
+};
+
+const IconButton = ({ text, icon: Icon }: { text: string; icon: ForwardRefExoticComponent<Omit<LucideProps, "ref">> }) => {
+  return (
+    <TooltipProvider>
+      <Tooltip delayDuration={400}>
+        <TooltipTrigger>
+          <Icon className="w-5" />
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>{text}</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 };
 
