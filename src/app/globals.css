@@ -127,4 +127,24 @@
       background-size: 100% 3px;
     }
   }
+
+  .pageloader {
+    height: 6px;
+    width: 130px;
+    --c: no-repeat linear-gradient(#1c1917 0 0);
+    background: var(--c), var(--c), #fafaf9;
+    background-size: 60% 100%;
+    animation: l16 3s infinite;
+  }
+  @keyframes l16 {
+    0% {
+      background-position: -150% 0, -150% 0;
+    }
+    66% {
+      background-position: 250% 0, -150% 0;
+    }
+    100% {
+      background-position: 250% 0, 250% 0;
+    }
+  }
 }
