@@ -39,7 +39,6 @@ const ProjectsSidebar = () => {
   async function handleLogOut() {
     try {
       await signOut();
-      console.log("User logged out successfully.");
       window.location.href = "/";
     } catch (error) {
       console.error("Failed to log out:", error);

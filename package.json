@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@clerk/elements": "^0.16.0",
     "@clerk/nextjs": "^5.7.1",
     "@prisma/client": "^5.20.0",
     "@radix-ui/react-scroll-area": "^1.2.0",
