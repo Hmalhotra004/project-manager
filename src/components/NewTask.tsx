@@ -1,15 +1,18 @@
+"use client";
 import { projectActions } from "@/store/projectSlice";
 import { RootState } from "@/types";
 import axios from "axios";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const NewTask = () => {
+  const [loading, setLoading] = useState(false);
   const enteredTaskRef = useRef<HTMLInputElement>(null);
   const selectedProjectId = useSelector((state: RootState) => state.selectedProjectId);
   const dispatch = useDispatch();
 
   async function addTask() {
+    setLoading(true);
     if (!enteredTaskRef.current) {
       return;
     }
@@ -24,6 +27,7 @@ const NewTask = () => {
     dispatch(projectActions.AddTask(response.data.task));
 
     enteredTaskRef.current.value = "";
+    setLoading(false);
   }
 
   return (
@@ -36,8 +40,9 @@ const NewTask = () => {
       <button
         onClick={addTask}
         className="text-stone-700 hover:text-stone-950 transition-all"
+        disabled={loading}
       >
-        Add Task
+        {loading ? <div className="spinner" /> : <span>Add Task</span>}
       </button>
     </div>
   );

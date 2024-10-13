@@ -1,12 +1,13 @@
 import { projectActions } from "@/store/projectSlice";
 import { Project } from "@/types";
 import axios from "axios";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import Input from "./Input";
 import Modal, { ModalHandle } from "./Modal";
 
 const NewProject = () => {
+  const [loading, setLoading] = useState(false);
   const titleRef = useRef<HTMLInputElement>(null);
   const despRef = useRef<HTMLTextAreaElement>(null);
   const dateRef = useRef<HTMLInputElement>(null);
@@ -20,6 +21,7 @@ const NewProject = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
 
     const title = titleRef.current?.value;
     const desp = despRef.current?.value;
@@ -37,8 +39,9 @@ const NewProject = () => {
     });
 
     const project: Project = response.data.project;
-
     dispatch(projectActions.AddProject(project));
+
+    setLoading(false);
   };
 
   return (
@@ -62,6 +65,7 @@ const NewProject = () => {
               type="button"
               onClick={handleCancelAddProject}
               className="text-stone-800 hover:text-stone-950 transition-colors"
+              disabled={loading}
             >
               Cancel
             </button>
@@ -69,9 +73,10 @@ const NewProject = () => {
           <li>
             <button
               type="submit"
-              className="px-6 py-2 rounded-md bg-stone-800 text-stone-50 hover:bg-stone-950 transition-colors"
+              className="px-4 py-2 rounded-md bg-stone-800 text-stone-50 hover:bg-stone-950 transition-colors"
+              disabled={loading}
             >
-              Save
+              {loading ? <div className="spinner" /> : <span>Save</span>}
             </button>
           </li>
         </menu>

@@ -5,10 +5,12 @@ import { RootState } from "@/types";
 import { UserButton } from "@clerk/nextjs";
 import axios from "axios";
 import { Trash } from "lucide-react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "./Button";
 
 const ProjectsSidebar = () => {
+  const [loading, setLoading] = useState(false);
   const projects = useSelector((state: RootState) => state.projects);
   const selectedProjectId = useSelector((state: RootState) => state.selectedProjectId);
   const dispatch = useDispatch<AppDispatch>();
@@ -23,10 +25,13 @@ const ProjectsSidebar = () => {
 
   async function handleDelete(id: string) {
     try {
+      setLoading(true);
       await axios.post("/api/projects/delete", { id });
       dispatch(projectActions.DeleteProject(id));
     } catch (error) {
       console.error("Failed to delete project:", error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -62,6 +67,7 @@ const ProjectsSidebar = () => {
               <button
                 className="ml-auto hover:text-rose-700"
                 onClick={() => handleDelete(project.Id)}
+                disabled={loading}
               >
                 <Trash className="w-5" />
               </button>
