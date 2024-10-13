@@ -2,9 +2,9 @@
 import { projectActions } from "@/store/projectSlice";
 import { AppDispatch } from "@/store/store";
 import { RootState } from "@/types";
-import { UserButton } from "@clerk/nextjs";
+import { useClerk } from "@clerk/nextjs";
 import axios from "axios";
-import { Trash } from "lucide-react";
+import { LogOut, Trash } from "lucide-react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Button from "./Button";
@@ -14,6 +14,7 @@ const ProjectsSidebar = () => {
   const projects = useSelector((state: RootState) => state.projects);
   const selectedProjectId = useSelector((state: RootState) => state.selectedProjectId);
   const dispatch = useDispatch<AppDispatch>();
+  const { signOut } = useClerk();
 
   function handleSelectClick(id: string) {
     dispatch(projectActions.SelectProject(id));
@@ -32,6 +33,16 @@ const ProjectsSidebar = () => {
       console.error("Failed to delete project:", error);
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function handleLogOut() {
+    try {
+      await signOut();
+      console.log("User logged out successfully.");
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Failed to log out:", error);
     }
   }
 
@@ -76,8 +87,14 @@ const ProjectsSidebar = () => {
           );
         })}
       </ul>
-      <div className="flex items-center justify-end mt-auto">
-        <UserButton />
+      <div className="flex items-center justify-center mt-auto">
+        <button
+          onClick={handleLogOut}
+          className="flex text-stone-200 hover:text-stone-400 transition-all"
+        >
+          <LogOut className="w-5 mr-2" />
+          Sign out
+        </button>
       </div>
     </aside>
   );
