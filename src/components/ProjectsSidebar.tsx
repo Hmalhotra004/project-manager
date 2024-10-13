@@ -76,7 +76,7 @@ const ProjectsSidebar = () => {
                 {project.completed ? <del>{project.name}</del> : <span>{project.name}</span>}
               </button>
               <button
-                className="ml-2 hover:text-red-500"
+                className="ml-2 hover:text-red-500 transition-all"
                 onClick={() => handleDelete(project.Id)}
                 disabled={loading}
               >
