@@ -1,4 +1,4 @@
-import { Projects } from "@prisma/client";
+import { Projects, Tasks } from "@prisma/client";
 
 export type Project = {
   Id: string;
@@ -17,5 +17,5 @@ export type RootState = {
   currAction: string;
   selectedProjectId: undefined | string;
   projects: Projects[];
-  tasks: Task[];
+  tasks: Tasks[];
 };
