@@ -1,18 +1,20 @@
 import { projectActions } from "@/store/projectSlice";
-import { Project } from "@/types";
+import { Project, RootState } from "@/types";
 import axios from "axios";
 import { useRef, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Input from "./Input";
 import Modal, { ModalHandle } from "./Modal";
 
 const NewProject = () => {
   const [loading, setLoading] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
   const titleRef = useRef<HTMLInputElement>(null);
   const despRef = useRef<HTMLTextAreaElement>(null);
   const dateRef = useRef<HTMLInputElement>(null);
   const modal = useRef<ModalHandle>(null);
 
+  const projects = useSelector((state: RootState) => state.projects);
   const dispatch = useDispatch();
 
   function handleCancelAddProject() {
@@ -28,20 +30,34 @@ const NewProject = () => {
     const date = dateRef.current?.value;
 
     if (!title?.trim() || !desp?.trim() || !date?.trim()) {
+      setModalMessage("Oops... looks like you forgot to enter a value.");
       modal.current?.open();
+      setLoading(false);
       return;
     }
 
-    const response = await axios.post("/api/projects/new", {
-      title,
-      desp,
-      date,
-    });
+    const duplicateProject = projects.find((project: Project) => project.name.toLowerCase() === title.toLowerCase());
 
-    const project: Project = response.data.project;
-    dispatch(projectActions.AddProject(project));
+    if (duplicateProject) {
+      setModalMessage("A project with this name already exists.");
+      modal.current?.open();
+      setLoading(false);
+      return;
+    }
 
-    setLoading(false);
+    try {
+      const response = await axios.post("/api/projects/new", {
+        title,
+        desp,
+        date,
+      });
+
+      dispatch(projectActions.AddProject(response.data.project));
+    } catch (error) {
+      console.error("Failed to create project:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -51,8 +67,7 @@ const NewProject = () => {
         btnCap="Close"
       >
         <h2 className="text-xl font-bold text-stone-700 my-4">Invalid Input</h2>
-        <p className="text-stone-600 mb-4">Oops... looks like you forgot to enter a value.</p>
-        <p className="text-stone-600 mb-4">Please make sure you provide a valid entry for every input field.</p>
+        <p className="text-stone-600 mb-4">{modalMessage}</p>
       </Modal>
 
       <form
