@@ -12,7 +12,6 @@ const NewTask = () => {
   const dispatch = useDispatch();
 
   async function addTask() {
-    setLoading(true);
     if (!enteredTaskRef.current) {
       return;
     }
@@ -23,11 +22,16 @@ const NewTask = () => {
       return;
     }
 
-    const response = await axios.post("/api/tasks/new", { name, projectId: selectedProjectId });
-    dispatch(projectActions.AddTask(response.data.task));
-
-    enteredTaskRef.current.value = "";
-    setLoading(false);
+    try {
+      setLoading(true);
+      const response = await axios.post("/api/tasks/new", { name, projectId: selectedProjectId });
+      dispatch(projectActions.AddTask(response.data.task));
+    } catch (err) {
+      console.log(err);
+    } finally {
+      enteredTaskRef.current.value = "";
+      setLoading(false);
+    }
   }
 
   return (
