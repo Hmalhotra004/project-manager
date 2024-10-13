@@ -17,7 +17,7 @@ const NewTask = () => {
       return;
     }
 
-    const name = enteredTaskRef.current.value;
+    const name = enteredTaskRef.current.value.charAt(0).toUpperCase() + enteredTaskRef.current.value.slice(1);
 
     if (!name.trim()) {
       return;

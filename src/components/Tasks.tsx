@@ -84,7 +84,7 @@ const Tasks = () => {
                     {activeTasks.map(task => (
                       <li
                         key={task.Id}
-                        className="flex justify-between my-2"
+                        className="flex justify-between my-2 text-left break-words"
                       >
                         <span>{task.name}</span>
                         <div className="flex">
@@ -122,7 +122,7 @@ const Tasks = () => {
                     {completedTasks.map(task => (
                       <li
                         key={task.Id}
-                        className="flex justify-between my-2 line-through text-stone-500"
+                        className="flex justify-between my-2 line-through text-stone-500 text-left break-words"
                       >
                         <span>{task.name}</span>
                         <div className="flex">

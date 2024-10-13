@@ -25,7 +25,11 @@ const NewProject = () => {
     e.preventDefault();
     setLoading(true);
 
-    const title = titleRef.current?.value;
+    const title = titleRef.current?.value
+      ?.split(" ")
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+
     const desp = despRef.current?.value;
     const date = dateRef.current?.value;
 

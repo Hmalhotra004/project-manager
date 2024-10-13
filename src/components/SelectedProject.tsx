@@ -1,4 +1,4 @@
-import { fetchTasks, projectActions } from "@/store/projectSlice";
+import { projectActions } from "@/store/projectSlice";
 import { AppDispatch } from "@/store/store";
 import { Projects } from "@prisma/client";
 import axios from "axios";
@@ -13,6 +13,7 @@ interface Props {
 const SelectedProject = ({ project }: Props) => {
   const dispatch = useDispatch<AppDispatch>();
 
+  const [loading, setLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [description, setDescription] = useState(project.description);
 
@@ -27,12 +28,6 @@ const SelectedProject = ({ project }: Props) => {
     day: "numeric",
   });
 
-  async function handleState() {
-    const state = !project.completed;
-    await axios.put("/api/projects/state", { projectId: project.Id, state });
-    dispatch(projectActions.UpdateState({ id: project.Id, Pstate: state }));
-  }
-
   function handleEditToggle() {
     setIsEditing(!isEditing);
   }
@@ -41,7 +36,16 @@ const SelectedProject = ({ project }: Props) => {
     setDescription(event.target.value);
   }
 
+  async function handleState() {
+    setLoading(true);
+    const state = !project.completed;
+    await axios.put("/api/projects/state", { projectId: project.Id, state });
+    dispatch(projectActions.UpdateState({ id: project.Id, Pstate: state }));
+    setLoading(false);
+  }
+
   async function handleDespSave() {
+    setLoading(true);
     if (!description.trim()) {
       setDescription(project.description);
       setIsEditing(false);
@@ -51,6 +55,7 @@ const SelectedProject = ({ project }: Props) => {
     await axios.put("/api/projects/desp", { description, projectId: project.Id });
     dispatch(projectActions.UpdateDesp({ id: project.Id, description }));
     setIsEditing(false);
+    setLoading(false);
   }
 
   return (
@@ -61,6 +66,7 @@ const SelectedProject = ({ project }: Props) => {
           <button
             onClick={handleState}
             className="text-black hover:text-emerald-700 transition-colors"
+            disabled={loading}
           >
             {project.completed ? "Mark as Not Completed" : "Mark as Completed"}
           </button>
@@ -80,7 +86,7 @@ const SelectedProject = ({ project }: Props) => {
                 onClick={handleDespSave}
                 className="px-4 py-2 rounded-md bg-stone-800 text-stone-50 hover:bg-stone-950 transition-colors"
               >
-                Save
+                {loading ? <div className="spinner" /> : <span>Save</span>}
               </button>
               <button
                 onClick={handleEditToggle}
