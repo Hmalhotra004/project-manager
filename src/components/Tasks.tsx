@@ -127,7 +127,7 @@ const Tasks = () => {
                         <span>{task.name}</span>
                         <div className="flex">
                           <button
-                            className="hover:text-rose-700 text-stone-700"
+                            className="hover:text-red-500 text-stone-700"
                             onClick={() => taskState(task.Id, task.completed, task.projectId)}
                             disabled={delLoading}
                           >

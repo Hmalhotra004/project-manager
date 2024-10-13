@@ -65,7 +65,7 @@ const SelectedProject = ({ project }: Props) => {
           <h1 className="text-3xl font-bold text-stone-600 mb-2">{project.name}</h1>
           <button
             onClick={handleState}
-            className="text-black hover:text-emerald-700 transition-colors"
+            className={`text-black transition-colors ${project.completed ? "hover:text-red-500" : "hover:text-emerald-800"}`}
             disabled={loading}
           >
             {project.completed ? "Mark as Not Completed" : "Mark as Completed"}
