@@ -1,6 +1,7 @@
 import { projectActions } from "@/store/projectSlice";
 import { Project, RootState } from "@/types";
 import axios from "axios";
+import { LoaderCircle } from "lucide-react";
 import { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Input from "./Input";
@@ -27,7 +28,7 @@ const NewProject = () => {
 
     const title = titleRef.current?.value
       ?.split(" ")
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
 
     const desp = despRef.current?.value;
@@ -40,7 +41,9 @@ const NewProject = () => {
       return;
     }
 
-    const duplicateProject = projects.find((project: Project) => project.name.toLowerCase() === title.toLowerCase());
+    const duplicateProject = projects.find(
+      (project: Project) => project.name.toLowerCase() === title.toLowerCase()
+    );
 
     if (duplicateProject) {
       setModalMessage("A project with this name already exists.");
@@ -95,7 +98,11 @@ const NewProject = () => {
               className="px-4 py-2 rounded-md bg-stone-800 text-stone-50 hover:bg-stone-950 transition-colors"
               disabled={loading}
             >
-              {loading ? <div className="spinner" /> : <span>Save</span>}
+              {loading ? (
+                <LoaderCircle className="animate-spin" />
+              ) : (
+                <span>Save</span>
+              )}
             </button>
           </li>
         </menu>

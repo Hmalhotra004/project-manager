@@ -11,7 +11,9 @@
   "dependencies": {
     "@clerk/elements": "^0.16.0",
     "@clerk/nextjs": "^5.7.1",
+    "@hookform/resolvers": "^3.9.0",
     "@prisma/client": "^5.20.0",
+    "@radix-ui/react-alert-dialog": "^1.1.2",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-scroll-area": "^1.2.0",
     "@radix-ui/react-separator": "^1.1.0",
@@ -26,10 +28,12 @@
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18",
+    "react-hook-form": "^7.53.1",
     "react-redux": "^9.1.2",
-    "tailwind-merge": "^2.5.3",
+    "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
-    "uuid": "^10.0.0"
+    "uuid": "^10.0.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/node": "^20",
