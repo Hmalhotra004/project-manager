@@ -1,51 +1,31 @@
 "use client";
-import { fetchTasks, projectActions } from "@/store/projectSlice";
+import { fetchTasks } from "@/store/projectSlice";
 import { AppDispatch } from "@/store/store";
 import { RootState } from "@/types";
-import axios from "axios";
-import { Check, LucideProps, Trash, X } from "lucide-react";
-import { ForwardRefExoticComponent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import NewTask from "./NewTask";
-import { Separator } from "./ui/separator";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
+import TaskList from "./TaskList";
 
 const Tasks = () => {
-  const [delLoading, setDelLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const tasks = useSelector((state: RootState) => state.tasks);
-  const selectedProjectId = useSelector((state: RootState) => state.selectedProjectId);
+  const selectedProjectId = useSelector(
+    (state: RootState) => state.selectedProjectId
+  );
   const dispatch = useDispatch<AppDispatch>();
 
-  async function deleteTask(Id: string) {
-    try {
-      setDelLoading(true);
-      await axios.post("/api/tasks/delete", { Id, projectId: selectedProjectId });
-      dispatch(projectActions.DeleteTask(Id));
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setDelLoading(false);
-    }
-  }
+  const selectedProjectTasks = tasks.filter(
+    (task) => task.projectId === selectedProjectId
+  );
 
-  async function taskState(Id: string, state: boolean, projectId: string) {
-    try {
-      setDelLoading(true);
-      const Tstate = !state;
-      await axios.put("/api/tasks/state", { Id, state: Tstate, projectId });
-      dispatch(projectActions.UpdateTaskState({ Id, Tstate, projectId }));
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setDelLoading(false);
-    }
-  }
+  const activeTasks = selectedProjectTasks
+    .filter((task) => !task.completed)
+    .sort((a, b) => a.name.localeCompare(b.name));
 
-  const selectedProjectTasks = tasks.filter(task => task.projectId === selectedProjectId);
-
-  const activeTasks = selectedProjectTasks.filter(task => !task.completed).sort((a, b) => a.name.localeCompare(b.name));
-  const completedTasks = selectedProjectTasks.filter(task => task.completed).sort((a, b) => a.name.localeCompare(b.name));
+  const completedTasks = selectedProjectTasks
+    .filter((task) => task.completed)
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   useEffect(() => {
     async function getTasks() {
@@ -75,116 +55,27 @@ const Tasks = () => {
       ) : (
         <>
           {activeTasks.length === 0 && completedTasks.length === 0 ? (
-            <p className="text-stone-800 my-4">This project does not have any tasks yet.</p>
+            <p className="text-stone-800 my-4">
+              This project does not have any tasks yet.
+            </p>
           ) : (
             <>
-              {activeTasks.length > 0 && (
-                <div>
-                  <h3 className="text-lg font-semibold text-stone-600 my-2">Active Tasks</h3>
-                  <ul className="px-4 py-2 rounded-md bg-stone-100">
-                    {activeTasks.map(task => (
-                      <li
-                        key={task.Id}
-                        className="flex justify-between my-2 text-left break-words"
-                      >
-                        <span>{task.name}</span>
-                        <div className="flex">
-                          <button
-                            className="hover:text-emerald-600"
-                            onClick={() => taskState(task.Id, task.completed, task.projectId)}
-                            disabled={delLoading}
-                          >
-                            <IconButton
-                              text="Mark as Completed"
-                              icon={Check}
-                            />
-                          </button>
+              <TaskList
+                label="Active Lists"
+                list={activeTasks}
+                type="Active"
+              />
 
-                          <Separator
-                            orientation="vertical"
-                            className="mx-2 bg-stone-700"
-                          />
-
-                          <button
-                            onClick={() => deleteTask(task.Id)}
-                            className="text-stone-700 hover:text-red-500 transition-colors"
-                            disabled={delLoading}
-                          >
-                            <IconButton
-                              text="Detele Task"
-                              icon={Trash}
-                            />
-                          </button>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              {completedTasks.length > 0 && (
-                <div>
-                  <h3 className="text-lg font-semibold text-stone-600 my-2">Completed Tasks</h3>
-                  <ul className="px-4 py-2 rounded-md bg-stone-100">
-                    {completedTasks.map(task => (
-                      <li
-                        key={task.Id}
-                        className="flex justify-between my-2 line-through text-stone-500 text-left break-words"
-                      >
-                        <span>{task.name}</span>
-                        <div className="flex">
-                          <button
-                            className="hover:text-red-500 text-stone-700"
-                            onClick={() => taskState(task.Id, task.completed, task.projectId)}
-                            disabled={delLoading}
-                          >
-                            <IconButton
-                              text="Mark as Not Completed"
-                              icon={X}
-                            />
-                          </button>
-
-                          <Separator
-                            orientation="vertical"
-                            className="mx-2 bg-stone-700"
-                          />
-
-                          <button
-                            onClick={() => deleteTask(task.Id)}
-                            className="text-stone-700 hover:text-red-500 transition-colors"
-                            disabled={delLoading}
-                          >
-                            <IconButton
-                              text="Detele Task"
-                              icon={Trash}
-                            />
-                          </button>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+              <TaskList
+                label="Completed Tasks"
+                list={completedTasks}
+                type="Completed"
+              />
             </>
           )}
         </>
       )}
     </section>
-  );
-};
-
-const IconButton = ({ text, icon: Icon }: { text: string; icon: ForwardRefExoticComponent<Omit<LucideProps, "ref">> }) => {
-  return (
-    <TooltipProvider>
-      <Tooltip delayDuration={400}>
-        <TooltipTrigger>
-          <Icon className="w-5" />
-        </TooltipTrigger>
-        <TooltipContent>
-          <p>{text}</p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
   );
 };
 

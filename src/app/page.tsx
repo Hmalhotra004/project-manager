@@ -16,7 +16,9 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const currAction = useSelector((state: RootState) => state.currAction);
   const projects = useSelector((state: RootState) => state.projects);
-  const selectedProjectId = useSelector((state: RootState) => state.selectedProjectId);
+  const selectedProjectId = useSelector(
+    (state: RootState) => state.selectedProjectId
+  );
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
 
@@ -48,14 +50,20 @@ const Home = () => {
   } else if (currAction === "add") {
     content = <NewProject />;
   } else {
-    const selectedProject = projects.find(project => project.Id === selectedProjectId);
-    content = selectedProject ? <SelectedProject project={selectedProject} /> : <NoProjectSelected />;
+    const selectedProject = projects.find(
+      (project) => project.Id === selectedProjectId
+    );
+    content = selectedProject ? (
+      <SelectedProject project={selectedProject} />
+    ) : (
+      <NoProjectSelected />
+    );
   }
 
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen bg-stone-400">
-        <div className="pageloader"></div>
+        <div className="pageloader0"></div>
       </div>
     );
   }
