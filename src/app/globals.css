@@ -47,10 +47,14 @@
 .pageloader0 {
   height: 6px;
   width: 130px;
-  --c: no-repeat linear-gradient(#1c1917 0 0);
-  background: var(--c), var(--c), #fafaf9;
-  background-size: 60% 100%;
-  animation: l16 3s infinite;
+  background: linear-gradient(#1c1917 0 0) 0/0% no-repeat #fafaf9;
+  animation: l1 2s infinite linear;
+}
+
+@keyframes l1 {
+  100% {
+    background-size: 100%;
+  }
 }
 
 @layer base {
