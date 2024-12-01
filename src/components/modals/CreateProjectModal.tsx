@@ -1,6 +1,15 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import {
@@ -18,14 +27,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import Loader from "../Loader";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
 
 interface CreateProjectModalProps {
   children: React.ReactNode;
@@ -39,7 +40,9 @@ const formSchema = z.object({
 
 const CreateProjectModal = ({ children }: CreateProjectModalProps) => {
   const [open, setOpen] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -50,8 +53,9 @@ const CreateProjectModal = ({ children }: CreateProjectModalProps) => {
     },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
+  const { mutateAsync: createProject } = useMutation({
+    mutationKey: ["projects"],
+    mutationFn: async (values: z.infer<typeof formSchema>) => {
       const response = await axios.post("/api/projects", {
         title: values.title,
         desp: values.desp,
@@ -62,12 +66,22 @@ const CreateProjectModal = ({ children }: CreateProjectModalProps) => {
         setOpen(false);
         router.push(`/projects/${response.data.id}`);
       }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+    },
+  });
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsCreating(true);
+    try {
+      await createProject(values);
     } catch (err) {
       console.error(err);
+    } finally {
+      setIsCreating(false);
     }
   }
-
-  const isloading = form.formState.isLoading;
 
   return (
     <Dialog
@@ -94,7 +108,7 @@ const CreateProjectModal = ({ children }: CreateProjectModalProps) => {
                     <Input
                       id="title"
                       type="text"
-                      disabled={isloading}
+                      disabled={isCreating}
                       {...field}
                     />
                   </FormControl>
@@ -112,7 +126,7 @@ const CreateProjectModal = ({ children }: CreateProjectModalProps) => {
                   <FormControl>
                     <Textarea
                       id="desp"
-                      disabled={isloading}
+                      disabled={isCreating}
                       {...field}
                     />
                   </FormControl>
@@ -121,8 +135,16 @@ const CreateProjectModal = ({ children }: CreateProjectModalProps) => {
               )}
             />
             <div className="flex gap-x-6 justify-end">
-              {/* <DialogClose>Close</DialogClose> */}
-              <Button type="submit">{isloading ? <Loader /> : "Create"}</Button>
+              <Button
+                type="submit"
+                disabled={isCreating}
+              >
+                {isCreating ? (
+                  <Loader2 className="animate-spin h-5 w-5" />
+                ) : (
+                  "Create"
+                )}
+              </Button>
             </div>
           </form>
         </Form>

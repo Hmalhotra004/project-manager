@@ -1,16 +1,16 @@
 "use client";
-import type { Metadata } from "next";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SessionProvider } from "next-auth/react";
-import { Inter, Poppins } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const poopins = Poppins({
-  subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-  variable: "--pop",
-});
+// const poopins = Poppins({
+//   subsets: ["latin"],
+//   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+//   variable: "--pop",
+// });
 
 // export const metadata: Metadata = {
 //   title: "Project Manager",
@@ -18,6 +18,8 @@ const poopins = Poppins({
 // };
 
 const fonts = `${inter.className}`;
+
+const queryClient = new QueryClient();
 
 export default function RootLayout({
   children,
@@ -33,7 +35,11 @@ export default function RootLayout({
         <title>Projectly</title>
       </head>
       <body className={fonts}>
-        <SessionProvider>{children}</SessionProvider>
+        <SessionProvider>
+          <QueryClientProvider client={queryClient}>
+            {children}
+          </QueryClientProvider>
+        </SessionProvider>
       </body>
     </html>
   );

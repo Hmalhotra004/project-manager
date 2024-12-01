@@ -2,6 +2,31 @@ import getCurrentUser from "@/actions/getCurrentUser";
 import db from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
+export async function GET() {
+  try {
+    const profile = await getCurrentUser();
+
+    if (!profile) {
+      return NextResponse.json("Unauthorized", { status: 401 });
+    }
+
+    const projects = await db.project.findMany({
+      where: {
+        userId: profile.id,
+      },
+      orderBy: [{ name: "asc" }, { completed: "asc" }],
+    });
+
+    return NextResponse.json(projects);
+  } catch (err) {
+    console.error("[GET Projects Error]", err);
+    return NextResponse.json(
+      { error: "Failed to fetch projects" },
+      { status: 500 }
+    );
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { title, desp, date } = await req.json();
@@ -13,10 +38,10 @@ export async function POST(req: NextRequest) {
     const profile = await getCurrentUser();
 
     if (!profile) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json("Unauthorized", { status: 401 });
     }
 
-    const project = await db.projects.create({
+    const project = await db.project.create({
       data: {
         name: title,
         description: desp,
@@ -43,7 +68,7 @@ export async function DELETE(req: NextRequest) {
     const profile = await getCurrentUser();
 
     if (!profile) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json("Unauthorized", { status: 401 });
     }
 
     if (!Id) {
@@ -53,7 +78,7 @@ export async function DELETE(req: NextRequest) {
       );
     }
 
-    const project = await db.projects.delete({
+    const project = await db.project.delete({
       where: {
         id: Id,
         userId: profile.id,
