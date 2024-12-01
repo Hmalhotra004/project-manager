@@ -22,11 +22,11 @@ model User {
 }
 
 model Projects {
-  id          String   @id @default(uuid())
-  name        String   @unique
-  description String
-  dueDate     DateTime
-  completed   Boolean  @default(false)
+  id          String    @id @default(uuid())
+  name        String    @unique
+  description String?
+  dueDate     DateTime?
+  completed   Boolean   @default(false)
 
   userId String
   user   User    @relation(fields: [userId], references: [id])

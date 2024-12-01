@@ -2,7 +2,7 @@ import NoProjectSelected from "@/components/NoProjectSelected";
 
 const HomePage = () => {
   return (
-    <div className="flex justify-center ml-[288px]">
+    <div className="flex justify-center mx-auto">
       <NoProjectSelected />
     </div>
   );

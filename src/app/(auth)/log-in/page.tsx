@@ -1,16 +1,12 @@
 "use client";
 
-// import AuthInput from "@/components/auth/AuthInput";
-// import AuthLabel from "@/components/auth/AuthLabel";
-// import AuthSocialButton from "@/components/auth/AuthSocialButton";
 import { Button } from "@/components/ui/button";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-// import toast from "react-hot-toast";
 import { BsGithub, BsGoogle } from "react-icons/bs";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
 import AuthSocialButton from "@/components/auth/AuthSocialButton";
@@ -46,8 +42,9 @@ const LoginPage = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      // TODO: set to "" later,
+      email: "hardikmalhotra150804@gmail.com",
+      password: "TLOU@123",
     },
   });
 
@@ -85,8 +82,8 @@ const LoginPage = () => {
   // };
 
   return (
-    <div className="flex min-h-full flex-col justify-center mt-4">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+    <div className="flex flex-col justify-center items-center h-dvh">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md border-stone-200 border-2">
         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-stone-900">
           Log in to your account
         </h2>

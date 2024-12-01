@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import CreateProjectModal from "./modals/CreateProjectModal";
 import { Button } from "./ui/button";
 
 const NoProjectSelected = () => {
@@ -21,7 +22,9 @@ const NoProjectSelected = () => {
       <p className="text-stone-400 mb-4">
         Select a project or get started with a new one
       </p>
-      <Button>Create new project</Button>
+      <CreateProjectModal>
+        <Button variant="stone">Create new project</Button>
+      </CreateProjectModal>
     </div>
   );
 };

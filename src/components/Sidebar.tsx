@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import { signOut } from "next-auth/react";
+import CreateProjectModal from "./modals/CreateProjectModal";
 
 const Sidebar = () => {
   return (
@@ -10,7 +11,15 @@ const Sidebar = () => {
       <h2 className="mb-4 font-bold uppercase md:text-xl text-stone-200">
         Your Projects
       </h2>
-      <Button onClick={() => {}}>+ Add Project</Button>
+      <CreateProjectModal>
+        <Button
+          variant="stone"
+          onClick={() => {}}
+          className="w-fit"
+        >
+          + Add Project
+        </Button>
+      </CreateProjectModal>
       <ul className="my-4 overflow-y-auto scroll-area">
         {/* {sortedProjects.map((project) => {
           const isSelected = project.Id === selectedProjectId;
