@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
+import { signOut } from "next-auth/react";
 
 const Sidebar = () => {
   return (
@@ -49,7 +50,7 @@ const Sidebar = () => {
         })} */}
       </ul>
       <button
-        onClick={() => {}}
+        onClick={() => signOut()}
         className="flex text-stone-200 hover:text-stone-400 transition-all items-center justify-center mt-auto"
       >
         <LogOut className="w-5 mr-2" />
