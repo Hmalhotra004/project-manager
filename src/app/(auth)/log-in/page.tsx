@@ -1,12 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { BsGithub, BsGoogle } from "react-icons/bs";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
 import AuthSocialButton from "@/components/auth/AuthSocialButton";
@@ -87,7 +87,7 @@ const LoginPage = () => {
         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-stone-900">
           Log in to your account
         </h2>
-        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="mt-4 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="px-4 py-8 sm:px-10">
             <Form {...form}>
               <form
@@ -177,7 +177,7 @@ const LoginPage = () => {
                 href="/sign-up"
                 className="underline cursor-pointer"
               >
-                Create and account
+                Create an account
               </a>
             </div>
           </div>

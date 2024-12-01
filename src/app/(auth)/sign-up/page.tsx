@@ -80,11 +80,11 @@ const SignUpPage = () => {
 
   return (
     <div className="flex flex-col justify-center items-center h-dvh">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+      <div className="mx-auto w-full sm:max-w-md border-stone-200 border-2">
         <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-stone-900">
           Sign up an account
         </h2>
-        <div className="mt-4 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="mt-2">
           <div className="px-4 py-8 sm:px-10">
             <Form {...form}>
               <form
@@ -189,7 +189,7 @@ const SignUpPage = () => {
               </div>
             </div>
             <div className="flex gap-2 justify-center text-sm mt-6 px-2 text-gray-500">
-              <div>Already have and account?</div>
+              <div>Already have an account?</div>
               <a
                 href="/log-in"
                 className="underline cursor-pointer"
