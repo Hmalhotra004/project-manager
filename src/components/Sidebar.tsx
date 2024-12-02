@@ -8,6 +8,7 @@ import { LogOut } from "lucide-react";
 import { signOut } from "next-auth/react";
 import CreateProjectModal from "./modals/CreateProjectModal";
 import SidebarItem from "./SidebarItem";
+import SkeletonProject from "./SkeletonProject";
 
 const Sidebar = () => {
   const {
@@ -40,7 +41,7 @@ const Sidebar = () => {
 
       <ul className="my-4 overflow-y-auto overflow-x-hidden">
         {isLoading ? (
-          <p>Loading...</p>
+          <SkeletonProject />
         ) : isError ? (
           <p className="text-red-500">Failed to load projects.</p>
         ) : projects && projects.length > 0 ? (
