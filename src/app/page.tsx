@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 const HomePage = async () => {
   const curretUser = await getCurrentUser();
 
-  const name = curretUser?.username;
+  const name = curretUser?.name;
   const email = curretUser?.email;
   const id = curretUser?.id;
 

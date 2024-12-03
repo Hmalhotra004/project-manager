@@ -42,9 +42,8 @@ const LoginPage = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      // TODO: set to "" later,
-      email: "hardikmalhotra150804@gmail.com",
-      password: "TLOU@123",
+      email: "",
+      password: "",
     },
   });
 

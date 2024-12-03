@@ -9,10 +9,12 @@ datasource db {
 }
 
 model User {
-  id       String  @id @unique @default(uuid())
-  username String? @unique
-  email    String? @unique
-  password String?
+  id            String    @id @unique @default(uuid())
+  name          String?   @unique
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
 
   projects Project[]
   accounts Account[]
@@ -29,7 +31,7 @@ model Project {
   completed   Boolean   @default(false)
 
   userId String
-  user   User    @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
   tasks  Task[]
 
   createdAt DateTime @default(now())
@@ -49,19 +51,23 @@ model Task {
 }
 
 model Account {
-  id                 String    @id @default(uuid())
-  userId             String
-  providerType       String
-  providerId         String
-  providerAccountId  String
-  refreshToken       String?
-  accessToken        String?
-  accessTokenExpires DateTime?
+  id                String  @id @default(uuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
 
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([providerId, providerAccountId])
+  @@unique([provider, providerAccountId])
 }
