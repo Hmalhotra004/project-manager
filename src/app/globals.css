@@ -11,3 +11,19 @@ body {
     --radius: 0.5rem;
   }
 }
+
+.scroll-area {
+  overflow: auto;
+}
+
+.scroll-area::-webkit-scrollbar {
+  display: none;
+}
+
+.scroll-area {
+  scrollbar-width: none;
+}
+
+.scroll-area {
+  -ms-overflow-style: none;
+}

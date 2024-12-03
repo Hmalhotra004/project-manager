@@ -1,8 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
@@ -27,6 +25,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import FormInput from "../auth/FormInput";
+import FormTextArea from "../auth/FormTextArea";
 
 interface CreateProjectModalProps {
   children: React.ReactNode;
@@ -56,15 +56,25 @@ const CreateProjectModal = ({ children }: CreateProjectModalProps) => {
   const { mutateAsync: createProject } = useMutation({
     mutationKey: ["projects"],
     mutationFn: async (values: z.infer<typeof formSchema>) => {
-      const response = await axios.post("/api/projects", {
-        title: values.title,
-        desp: values.desp,
-        date: values.dueDate,
-      });
-      if (response.status === 200) {
-        form.reset();
-        setOpen(false);
-        router.push(`/projects/${response.data.id}`);
+      try {
+        const response = await axios.post("/api/projects", {
+          title: values.title,
+          desp: values.desp,
+          date: values.dueDate,
+        });
+        if (response.status === 200) {
+          form.reset();
+          setOpen(false);
+          router.push(`/projects/${response.data.id}`);
+        }
+      } catch (error) {
+        if (axios.isAxiosError(error) && error.response?.status === 409) {
+          const errorData = error.response.data;
+          form.setError("title", {
+            type: "manual",
+            message: errorData,
+          });
+        }
       }
     },
     onSuccess: () => {
@@ -82,6 +92,8 @@ const CreateProjectModal = ({ children }: CreateProjectModalProps) => {
       setIsCreating(false);
     }
   }
+
+  const isLoading = form.formState.isLoading;
 
   return (
     <Dialog
@@ -105,11 +117,12 @@ const CreateProjectModal = ({ children }: CreateProjectModalProps) => {
                 <FormItem>
                   <FormLabel id="title">Title</FormLabel>
                   <FormControl>
-                    <Input
+                    <FormInput
                       id="title"
                       type="text"
-                      disabled={isCreating}
-                      {...field}
+                      field={field}
+                      disabled={isLoading}
+                      fieldState={fieldState}
                     />
                   </FormControl>
                   <FormMessage>{fieldState.error?.message}</FormMessage>
@@ -124,17 +137,18 @@ const CreateProjectModal = ({ children }: CreateProjectModalProps) => {
                 <FormItem>
                   <FormLabel id="desp">Description</FormLabel>
                   <FormControl>
-                    <Textarea
-                      id="desp"
+                    <FormTextArea
+                      type="text"
                       disabled={isCreating}
-                      {...field}
+                      field={field}
                     />
                   </FormControl>
                   <FormMessage>{fieldState.error?.message}</FormMessage>
                 </FormItem>
               )}
             />
-            <div className="flex gap-x-6 justify-end">
+
+            <div className="flex justify-end">
               <Button
                 type="submit"
                 disabled={isCreating}

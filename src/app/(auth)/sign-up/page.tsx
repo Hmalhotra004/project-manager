@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { BsGithub, BsGoogle } from "react-icons/bs";
 import { z } from "zod";
 
+import FormInput from "@/components/auth/FormInput";
 import {
   Form,
   FormControl,
@@ -19,7 +20,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 
 const formSchema = z.object({
   name: z.string().min(1, "name is required"),
@@ -53,30 +53,44 @@ const SignUpPage = () => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     try {
-      const response = await axios.post("/api/register", values);
+      const response = await axios.post("/api/register", {
+        name: values.name,
+        email: values.email,
+        password: values.password,
+      });
       if (response.status === 200) {
         form.reset();
         signIn("credentials", values);
       }
-    } catch (err) {
-      console.error(err);
-      // toast.error("Something went wrong");
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 409) {
+        const errorData = error.response.data;
+        form.setError("email", {
+          type: "manual",
+          message: errorData,
+        });
+      } else {
+        form.setError("root", {
+          type: "manual",
+          message: "Somthing went wrong, Please try again later",
+        });
+      }
     } finally {
       setIsLoading(false);
     }
   }
 
-  // const socialAction = (action: string) => {
-  //   setIsLoading(true);
-  //   signIn(action, {
-  //     redirect: false,
-  //   })
-  //     .then((callback) => {
-  //       if (callback?.error) toast.error("Invaild credentials");
-  //       if (callback?.ok && !callback?.error) toast.success("Logged in");
-  //     })
-  //     .finally(() => setIsLoading(false));
-  // };
+  const socialAction = (action: string) => {
+    setIsLoading(true);
+    signIn(action, {
+      redirect: false,
+    })
+      .then((callback) => {
+        // if (callback?.error) toast.error("Invaild credentials");
+        // if (callback?.ok && !callback?.error) toast.success("Logged in");
+      })
+      .finally(() => setIsLoading(false));
+  };
 
   return (
     <div className="flex flex-col justify-center items-center h-dvh">
@@ -98,12 +112,12 @@ const SignUpPage = () => {
                     <FormItem>
                       <FormLabel id="name">Name</FormLabel>
                       <FormControl>
-                        <Input
+                        <FormInput
                           id="name"
                           type="text"
+                          field={field}
                           disabled={isLoading}
-                          autoComplete="email"
-                          {...field}
+                          fieldState={fieldState}
                         />
                       </FormControl>
                       <FormMessage>{fieldState.error?.message}</FormMessage>
@@ -118,12 +132,13 @@ const SignUpPage = () => {
                     <FormItem>
                       <FormLabel id="email">Email Address</FormLabel>
                       <FormControl>
-                        <Input
+                        <FormInput
                           id="email"
                           type="text"
+                          field={field}
                           disabled={isLoading}
                           autoComplete="email"
-                          {...field}
+                          fieldState={fieldState}
                         />
                       </FormControl>
                       <FormMessage>{fieldState.error?.message}</FormMessage>
@@ -138,12 +153,12 @@ const SignUpPage = () => {
                     <FormItem>
                       <FormLabel id="password">Password</FormLabel>
                       <FormControl>
-                        <Input
+                        <FormInput
                           id="password"
                           type="password"
+                          field={field}
                           disabled={isLoading}
-                          autoComplete="email"
-                          {...field}
+                          fieldState={fieldState}
                         />
                       </FormControl>
                       <FormMessage>{fieldState.error?.message}</FormMessage>
@@ -151,7 +166,9 @@ const SignUpPage = () => {
                   )}
                 />
 
-                {/* <p>{form.formState.errors.root}</p> */}
+                <FormMessage className="text-lg">
+                  {form.formState.errors.root?.message}
+                </FormMessage>
 
                 <Button
                   disabled={isLoading}
@@ -171,20 +188,18 @@ const SignUpPage = () => {
 
                 <div className="relative flex justify-center text-sm">
                   <span className="bg-white px-2 text-gray-500">
-                    Or continue with
+                    or continue with
                   </span>
                 </div>
               </div>
               <div className="mt-6 flex gap-2">
                 <AuthSocialButton
                   icon={BsGithub}
-                  onClick={() => {}}
-                  // onClick={() => socialAction("github")}
+                  onClick={() => socialAction("github")}
                 />
                 <AuthSocialButton
-                  onClick={() => {}}
                   icon={BsGoogle}
-                  // onClick={() => socialAction("google")}
+                  onClick={() => socialAction("google")}
                 />
               </div>
             </div>

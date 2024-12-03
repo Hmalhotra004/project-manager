@@ -41,6 +41,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json("Unauthorized", { status: 401 });
     }
 
+    const existingProject = await db.project.findUnique({
+      where: {
+        name: title,
+      },
+    });
+
+    if (existingProject)
+      return new NextResponse("Project already exists", { status: 409 });
+
     const project = await db.project.create({
       data: {
         name: title,

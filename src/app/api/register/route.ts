@@ -10,6 +10,15 @@ export async function POST(req: NextRequest) {
     if (!name || !email || !password)
       return new NextResponse("missing info", { status: 400 });
 
+    const existingUser = await db.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (existingUser)
+      return new NextResponse("Email already exists", { status: 409 });
+
     const hashedPassword = await bcrypt.hash(password, 12);
 
     const user = await db.user.create({

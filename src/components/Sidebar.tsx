@@ -39,7 +39,7 @@ const Sidebar = () => {
         </Button>
       </CreateProjectModal>
 
-      <ul className="my-4 overflow-y-auto overflow-x-hidden">
+      <ul className="my-4 overflow-x-hidden scroll-area">
         {isLoading ? (
           <SkeletonProject />
         ) : isError ? (
