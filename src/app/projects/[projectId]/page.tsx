@@ -2,8 +2,9 @@
 
 import Loader from "@/components/Loader";
 import EditProjectModal from "@/components/modals/EditProjectModal";
+import Tasks from "@/components/tasks/Tasks";
 import { cn } from "@/lib/utils";
-import { Project } from "@prisma/client";
+import { projectWithTasks } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { ServerCrash } from "lucide-react";
@@ -17,7 +18,7 @@ const ProjectIdPage = () => {
     data: project,
     isLoading,
     isError,
-  } = useQuery<Project>({
+  } = useQuery<projectWithTasks>({
     queryKey: [params.projectId],
     queryFn: async () => {
       try {
@@ -119,7 +120,10 @@ const ProjectIdPage = () => {
           <button className="text-blue-500 mt-1">Edit Project</button>
         </EditProjectModal>
       </header>
-      {/* <Tasks /> */}
+      <Tasks
+        projectId={project?.id}
+        tasks={project?.tasks}
+      />
     </div>
   );
 };
