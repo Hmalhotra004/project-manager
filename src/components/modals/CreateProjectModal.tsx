@@ -37,9 +37,11 @@ interface CreateProjectModalProps {
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
   desp: z.string().optional(),
-  dueDate: z.date().refine((date) => date > new Date(), {
-    message: "Due date must be in the future.",
-  }),
+  dueDate: z
+    .date()
+    .refine((date) => date >= new Date(new Date().setHours(0, 0, 0, 0)), {
+      message: "Due date must be in the future.",
+    }),
 });
 
 const CreateProjectModal = ({ children }: CreateProjectModalProps) => {

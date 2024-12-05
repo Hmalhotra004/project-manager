@@ -36,9 +36,11 @@ interface EditProjectModalProps {
 
 const formSchema = z.object({
   desp: z.string().optional(),
-  dueDate: z.date().refine((date) => date > new Date(), {
-    message: "Due date must be in the future.",
-  }),
+  dueDate: z
+    .date()
+    .refine((date) => date >= new Date(new Date().setHours(0, 0, 0, 0)), {
+      message: "Due date must be in the future.",
+    }),
 });
 
 const EditProjectModal = ({ children, project }: EditProjectModalProps) => {
@@ -106,7 +108,7 @@ const EditProjectModal = ({ children, project }: EditProjectModalProps) => {
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>New Project</DialogTitle>
+          <DialogTitle>Edit {project.name}</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form
