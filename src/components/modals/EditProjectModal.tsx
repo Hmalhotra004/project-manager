@@ -58,7 +58,6 @@ const EditProjectModal = ({ children, project }: EditProjectModalProps) => {
     mutationKey: [project.id],
     mutationFn: async (values: z.infer<typeof formSchema>) => {
       try {
-        console.log(format(values.dueDate, "PP"));
         const response = await axios.patch("/api/projects/find", {
           desp: values.desp,
           date: format(values.dueDate, "PP"),

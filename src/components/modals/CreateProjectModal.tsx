@@ -61,7 +61,6 @@ const CreateProjectModal = ({ children }: CreateProjectModalProps) => {
     mutationKey: ["projects"],
     mutationFn: async (values: z.infer<typeof formSchema>) => {
       try {
-        console.log(format(values.dueDate, "PP"));
         const response = await axios.post("/api/projects", {
           title: values.title,
           desp: values.desp,

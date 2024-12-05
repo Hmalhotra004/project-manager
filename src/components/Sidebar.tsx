@@ -18,14 +18,13 @@ const Sidebar = () => {
     isLoading,
     isError,
   } = useQuery<Project[]>({
-    queryKey: ["projects", params.projectId],
+    queryKey: ["projects"],
     queryFn: async () => {
       const response = await axios.get("/api/projects");
-      console.log(response.data);
       return response.data;
     },
     refetchInterval: 15 * 60 * 1000,
-    staleTime: 30 * 60 * 1000,
+    // staleTime: 30 * 60 * 1000,
     // cacheTime: 30 * 60 * 1000,
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
