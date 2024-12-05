@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
       data: {
         name: title,
         description: desp,
-        dueDate: new Date(date),
+        dueDate: date,
         userId: profile.id,
       },
     });

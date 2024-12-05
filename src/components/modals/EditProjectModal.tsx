@@ -1,6 +1,5 @@
 "use client";
 
-import FormInput from "@/components/auth/FormInput";
 import FormTextArea from "@/components/auth/FormTextArea";
 import DatePicker from "@/components/DatePicker";
 import { Button } from "@/components/ui/button";
@@ -8,8 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -28,32 +26,31 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Project } from "@prisma/client";
 import { format } from "date-fns";
 
-interface CreateProjectModalProps {
+interface EditProjectModalProps {
   children: React.ReactNode;
+  project: Project;
 }
 
 const formSchema = z.object({
-  title: z.string().min(1, "Title is required"),
   desp: z.string().optional(),
   dueDate: z.date().refine((date) => date > new Date(), {
     message: "Due date must be in the future.",
   }),
 });
 
-const CreateProjectModal = ({ children }: CreateProjectModalProps) => {
+const EditProjectModal = ({ children, project }: EditProjectModalProps) => {
   const [open, setOpen] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
-  const router = useRouter();
   const queryClient = useQueryClient();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
-      desp: "",
-      dueDate: new Date(),
+      desp: project.description || "",
+      dueDate: new Date(project.dueDate),
     },
   });
 
@@ -62,28 +59,26 @@ const CreateProjectModal = ({ children }: CreateProjectModalProps) => {
     mutationFn: async (values: z.infer<typeof formSchema>) => {
       try {
         console.log(format(values.dueDate, "PP"));
-        const response = await axios.post("/api/projects", {
-          title: values.title,
+        const response = await axios.patch("/api/projects/find", {
           desp: values.desp,
           date: format(values.dueDate, "PP"),
+          id: project.id,
         });
         if (response.status === 200) {
           form.reset();
           setOpen(false);
-          router.push(`/projects/${response.data.id}`);
         }
       } catch (error) {
-        if (axios.isAxiosError(error) && error.response?.status === 409) {
-          const errorData = error.response.data;
-          form.setError("title", {
+        if (axios.isAxiosError(error)) {
+          form.setError("root", {
             type: "manual",
-            message: errorData,
+            message: "Something went wrong",
           });
         }
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["projects"] });
+      queryClient.invalidateQueries({ queryKey: ["projects", project.id] });
     },
   });
 
@@ -98,7 +93,11 @@ const CreateProjectModal = ({ children }: CreateProjectModalProps) => {
     }
   }
 
-  const isLoading = form.formState.isLoading;
+  useEffect(() => {
+    form.reset();
+    form.setValue("desp", project.description || "");
+    form.setValue("dueDate", new Date(project.dueDate));
+  }, [project, form]);
 
   return (
     <Dialog
@@ -115,26 +114,6 @@ const CreateProjectModal = ({ children }: CreateProjectModalProps) => {
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-4"
           >
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field, fieldState }) => (
-                <FormItem>
-                  <FormLabel id="title">Title</FormLabel>
-                  <FormControl>
-                    <FormInput
-                      id="title"
-                      type="text"
-                      field={field}
-                      disabled={isLoading}
-                      fieldState={fieldState}
-                    />
-                  </FormControl>
-                  <FormMessage>{fieldState.error?.message}</FormMessage>
-                </FormItem>
-              )}
-            />
-
             <FormField
               control={form.control}
               name="desp"
@@ -178,7 +157,7 @@ const CreateProjectModal = ({ children }: CreateProjectModalProps) => {
                 {isCreating ? (
                   <Loader2 className="animate-spin h-5 w-5" />
                 ) : (
-                  "Create"
+                  "Save"
                 )}
               </Button>
             </div>
@@ -189,4 +168,4 @@ const CreateProjectModal = ({ children }: CreateProjectModalProps) => {
   );
 };
 
-export default CreateProjectModal;
+export default EditProjectModal;

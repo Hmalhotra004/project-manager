@@ -1,11 +1,11 @@
 "use client";
 
 import Loader from "@/components/Loader";
+import EditProjectModal from "@/components/modals/EditProjectModal";
 import { cn } from "@/lib/utils";
 import { Project } from "@prisma/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { format } from "date-fns";
 import { ServerCrash } from "lucide-react";
 import { useParams } from "next/navigation";
 
@@ -63,9 +63,7 @@ const ProjectIdPage = () => {
   const isDueDatePassed =
     project?.dueDate && new Date(project.dueDate) < new Date();
 
-  const formattedDate = project?.dueDate
-    ? format(project.dueDate, "PP")
-    : "No Due Date";
+  const formattedDate = project?.dueDate;
 
   if (isLoading) {
     return (
@@ -124,7 +122,9 @@ const ProjectIdPage = () => {
           {project?.description}
         </p>
 
-        <button className="text-blue-500 mt-1">Edit Project</button>
+        <EditProjectModal project={project!}>
+          <button className="text-blue-500 mt-1">Edit Project</button>
+        </EditProjectModal>
       </header>
       {/* <Tasks /> */}
     </div>
