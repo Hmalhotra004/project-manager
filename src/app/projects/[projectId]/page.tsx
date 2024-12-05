@@ -18,7 +18,7 @@ const ProjectIdPage = () => {
     isLoading,
     isError,
   } = useQuery<Project>({
-    queryKey: ["project"],
+    queryKey: [params.projectId],
     queryFn: async () => {
       try {
         const response = await axios.post(`/api/projects/find`, {
@@ -32,7 +32,7 @@ const ProjectIdPage = () => {
   });
 
   const { mutateAsync: StateChange, isPending } = useMutation({
-    mutationKey: ["project"],
+    mutationKey: [params.projectId],
     mutationFn: async () => {
       try {
         await axios.put(`/api/projects/find/`, {
@@ -43,20 +43,13 @@ const ProjectIdPage = () => {
         console.error(err);
       }
     },
-    onMutate: async () => {
-      queryClient.setQueryData(
-        ["project"],
-        (oldProject: Project | undefined) => {
-          if (!oldProject) return undefined;
-          return { ...oldProject, completed: !oldProject.completed };
-        }
-      );
-    },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["projects"] });
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["projects"] });
+      queryClient.invalidateQueries({
+        queryKey: [params.projectId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["projects"],
+      });
     },
   });
 

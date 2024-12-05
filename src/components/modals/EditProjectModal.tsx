@@ -55,7 +55,7 @@ const EditProjectModal = ({ children, project }: EditProjectModalProps) => {
   });
 
   const { mutateAsync: createProject } = useMutation({
-    mutationKey: ["projects"],
+    mutationKey: [project.id],
     mutationFn: async (values: z.infer<typeof formSchema>) => {
       try {
         console.log(format(values.dueDate, "PP"));
@@ -78,7 +78,7 @@ const EditProjectModal = ({ children, project }: EditProjectModalProps) => {
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["projects", project.id] });
+      queryClient.invalidateQueries({ queryKey: [project.id] });
     },
   });
 
